@@ -19,13 +19,13 @@ enum Buttons : String {
     case nine = "9"
     case zero = "0"
     case dot = "."
-    case left = "<"
-    case right = ">"
-    case swap = "||"
-    case copy = "copy"
-    case paste = "paste"
-    case remove = "<-"
-    case clear = "AC"
+    case left = "arrow.left"
+    case right = "arrow.right"
+    case swap = "rectangle.2.swap"
+    case copy = "doc.on.clipboard"
+    case paste = "doc.on.clipboard.fill"
+    case remove = "delete.left.fill"
+    case clear = "trash.slash.fill"
     
     var buttonColor: Color {
         switch self {
@@ -35,6 +35,15 @@ enum Buttons : String {
             return .orange
         default:
             return Color(UIColor.darkGray)
+        }
+    }
+    
+    var buttonLabel: Text {
+        switch self {
+        case .left, .right, .swap, .copy, .paste, .remove, .clear:
+            return Text(Image(systemName: self.rawValue))
+        default:
+            return Text(self.rawValue)
         }
     }
 }

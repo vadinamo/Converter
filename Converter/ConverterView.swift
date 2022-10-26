@@ -6,12 +6,17 @@
 //
 
 import SwiftUI
+import AlertToast
 
 struct ConverterView: View {
     @State var currentCategory: Int = 0
     
     @State var type1: Int = 0
     @State var type2: Int = 0
+    
+    @State var copyToast = false
+    @State var invalidInputToast = false
+    @State var symbolLimitToast = false
     
     @State var input: String = "0"
     
@@ -73,7 +78,7 @@ struct ConverterView: View {
                         Button(action: {
                             buttonTap(button: item)
                         }, label: {
-                            Text(item.rawValue)
+                            item.buttonLabel
                                 .font(.largeTitle)
                                 .foregroundColor(.white)
                                 .frame(
@@ -85,22 +90,36 @@ struct ConverterView: View {
                     }
                 }
             }
-        }.padding(.all)
+        }
+        .toast(isPresenting: $copyToast, duration: 1, tapToDismiss: false) {
+            AlertToast(displayMode: .hud, type: .regular, title: "Copied")
+        }
+        .toast(isPresenting: $invalidInputToast, duration: 1, tapToDismiss: false) {
+            AlertToast(displayMode: .hud, type: .regular, title: "хуйня переделывай")
+        }
+        .toast(isPresenting: $symbolLimitToast, duration: 1, tapToDismiss: false) {
+            AlertToast(displayMode: .hud, type: .error(.red), title: "Max input length is 15 symbols")
+        }
+        .padding(.all)
     }
     
     func buttonWidth(item: Buttons) -> CGFloat {
         if item == .zero {
-            return (UIScreen.main.bounds.width - (4*12)) / 4 * 2
+            return (UIScreen.main.bounds.width - (4 * 12)) / 4 * 2
         }
         else if item == .left || item == .right {
-            return (UIScreen.main.bounds.width - (4*12)) / 4 * 3 / 2
+            return (UIScreen.main.bounds.width - (4 * 12)) / 4 * 3 / 2
         }
             
-        return (UIScreen.main.bounds.width - (5*12)) / 4
+        return (UIScreen.main.bounds.width - (5 * 12)) / 4
     }
     
     func buttonHeight(item: Buttons) -> CGFloat {
-        return (UIScreen.main.bounds.width - (5*12)) / 4
+        return (UIScreen.main.bounds.width - (5 * 12)) / 4
+    }
+    
+    func clearInput() {
+        self.input = "0"
     }
     
     func buttonTap(button: Buttons) {
@@ -115,8 +134,32 @@ struct ConverterView: View {
             }
             break
         case .copy:
+            UIPasteboard.general.string = output
+            self.copyToast.toggle()
             break
         case .paste:
+            if var myString = UIPasteboard.general.string {
+                myString = myString.replacingOccurrences(of: ",", with: ".")
+                if myString.count > 15 || myString.count == 15 && myString.last == "." {
+                    self.symbolLimitToast.toggle()
+                    break
+                }
+                    
+                let re = "[.0-9]+"
+                var stringToCheck = myString.replacingOccurrences(of: re, with: "", options: [.regularExpression])
+                if stringToCheck.count != 0 {
+                    self.invalidInputToast.toggle()
+                    break
+                }
+                
+                if myString.filter({ $0 == "." }).count > 1 {
+                    self.invalidInputToast.toggle()
+                    break
+                }
+                
+                clearInput()
+                self.input = myString
+            }
             break
         case .remove:
             if input.count > 1 {
@@ -127,10 +170,10 @@ struct ConverterView: View {
             }
             break
         case .clear:
-            self.input = "0"
+            clearInput()
             break
         case .dot:
-            if !input.contains(".") {
+            if !input.contains(".") && input.count < 14 {
                 self.input = "\(self.input)\(button.rawValue)"
             }
             break
