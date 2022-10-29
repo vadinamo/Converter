@@ -23,10 +23,11 @@ struct ConverterView: View {
     @State var symbolLimitToast = false
     @State var extraDotsToast = false
     @State var extraZerosToast = false
+    @State var swapToast = false
     
     @State var input: String = "0|"
     var output: String {
-        var value = Double(input.replacingOccurrences(of: "|", with: "")) ?? 0
+        let value = Double(input.replacingOccurrences(of: "|", with: "")) ?? 0
         var result = String(value / valueCoefficients[currentCategory][type1] * valueCoefficients[currentCategory][type2])
         if String(result.suffix(2)) == ".0" {
             result.removeLast(2)
@@ -124,6 +125,9 @@ struct ConverterView: View {
         .toast(isPresenting: $pasteToast, duration: 1, tapToDismiss: false) {
             AlertToast(displayMode: .hud, type: .regular, title: "Pasted")
         }
+        .toast(isPresenting: $swapToast, duration: 1, tapToDismiss: false) {
+            AlertToast(displayMode: .hud, type: .regular, title: "Swaped")
+        }
         .toast(isPresenting: $extraDotsToast, duration: 2, tapToDismiss: false) {
             AlertToast(displayMode: .hud, type: .error(.red), title: "Input can contain only one dot")
         }
@@ -134,7 +138,7 @@ struct ConverterView: View {
             AlertToast(displayMode: .hud, type: .regular, title: "хуйня переделывай")
         }
         .toast(isPresenting: $symbolLimitToast, duration: 3, tapToDismiss: false) {
-            AlertToast(displayMode: .hud, type: .error(.red), title: "Max input length is 15 symbols")
+            AlertToast(displayMode: .hud, type: .error(.red), title: "Max input length is 15 numbers")
         }
         
         Spacer()
@@ -212,6 +216,10 @@ struct ConverterView: View {
             if output.replacingOccurrences(of: ".", with: "").count <= 15 {
                 self.cursorIndex = output.count
                 self.input = "\(output)\("|")"
+                let buf = type1
+                self.type1 = type2
+                self.type2 = buf
+                self.swapToast.toggle()
             }
             else {
                 self.symbolLimitToast.toggle()
@@ -235,7 +243,7 @@ struct ConverterView: View {
                 }
                     
                 let re = "[.0-9]+"
-                var stringToCheck = myString.replacingOccurrences(of: re, with: "", options: [.regularExpression])
+                let stringToCheck = myString.replacingOccurrences(of: re, with: "", options: [.regularExpression])
                 if stringToCheck.count != 0 {
                     self.invalidInputToast.toggle()
                     break
@@ -256,13 +264,27 @@ struct ConverterView: View {
             if input.replacingOccurrences(of: "|", with: "").count > 1 && cursorIndex > 0 {
                 self.input = input.replacingOccurrences(of: "|", with: "")
                 
-                var start = input.prefix(cursorIndex - 1)
-                var end = input.suffix(input.count - cursorIndex)
+                let start = input.prefix(cursorIndex - 1)
+                let end = input.suffix(input.count - cursorIndex)
                 
-                self.input = "\(start)\("|")\(end)"
-                self.cursorIndex -= 1
+                let string = "\(start)\("|")\(end)"
+                var convertedString = String(Double(string.replacingOccurrences(of: "|", with: "")) ?? 0)
+                if String(convertedString.suffix(2)) == ".0" {
+                    convertedString.removeLast(2)
+                }
+                if string.replacingOccurrences(of: "|", with: "") != convertedString && string.replacingOccurrences(of: "|", with: "") != "\(convertedString)\(".")" {
+                    self.input = "\("|")\(String(Double(string.replacingOccurrences(of: "|", with: "")) ?? 0))"
+                    if String(input.suffix(2)) == ".0" {
+                        self.input.removeLast(2)
+                    }
+                    self.cursorIndex = 0
+                }
+                else {
+                    self.input = string
+                    self.cursorIndex -= 1
+                }
             }
-            else if input.replacingOccurrences(of: "|", with: "").count == 1 {
+            else if input.replacingOccurrences(of: "|", with: "").count == 1 &&  input.replacingOccurrences(of: "|", with: "") != "0"{
                 self.input = "0|"
                 self.cursorIndex = 1
             }
@@ -274,10 +296,10 @@ struct ConverterView: View {
             if input.contains(".") {
                 self.extraDotsToast.toggle()
             }
-            else if input.replacingOccurrences(of: "|", with: "").replacingOccurrences(of: ".", with: "").count < 15{
+            else if input.replacingOccurrences(of: "|", with: "").replacingOccurrences(of: ".", with: "").count <= 15 && cursorIndex != 15 {
                 self.input = input.replacingOccurrences(of: "|", with: "")
-                var start = input.prefix(cursorIndex)
-                var end = input.suffix(input.count - cursorIndex)
+                let start = input.prefix(cursorIndex)
+                let end = input.suffix(input.count - cursorIndex)
                 self.input = "\(start)\(button.rawValue)\("|")\(end)"
                 self.cursorIndex += 1
             }
