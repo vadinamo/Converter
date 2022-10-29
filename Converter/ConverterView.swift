@@ -10,6 +10,7 @@ import AlertToast
 
 struct ConverterView: View {
     @State private var orientation = UIDevice.current.orientation
+    @State private var cursorIndex = 1
     
     @State var currentCategory: Int = 0
     
@@ -17,12 +18,15 @@ struct ConverterView: View {
     @State var type2: Int = 0
     
     @State var copyToast = false
+    @State var pasteToast = false
     @State var invalidInputToast = false
     @State var symbolLimitToast = false
+    @State var extraDotsToast = false
+    @State var extraZerosToast = false
     
-    @State var input: String = "0"
+    @State var input: String = "0|"
     var output: String {
-        var value = Double(input) ?? 0
+        var value = Double(input.replacingOccurrences(of: "|", with: "")) ?? 0
         var result = String(value / valueCoefficients[currentCategory][type1] * valueCoefficients[currentCategory][type2])
         if String(result.suffix(2)) == ".0" {
             result.removeLast(2)
@@ -101,7 +105,8 @@ struct ConverterView: View {
     }
     
     func clearInput() {
-        self.input = "0"
+        self.cursorIndex = 1
+        self.input = "0|"
     }
     
     @ViewBuilder
@@ -111,9 +116,19 @@ struct ConverterView: View {
                 Text(unitCategories[$0])
                     .font(.largeTitle)
             }
-        }.pickerStyle(SegmentedPickerStyle())
+        }
+        .pickerStyle(SegmentedPickerStyle())
         .toast(isPresenting: $copyToast, duration: 1, tapToDismiss: false) {
             AlertToast(displayMode: .hud, type: .regular, title: "Copied")
+        }
+        .toast(isPresenting: $pasteToast, duration: 1, tapToDismiss: false) {
+            AlertToast(displayMode: .hud, type: .regular, title: "Pasted")
+        }
+        .toast(isPresenting: $extraDotsToast, duration: 2, tapToDismiss: false) {
+            AlertToast(displayMode: .hud, type: .error(.red), title: "Input can contain only one dot")
+        }
+        .toast(isPresenting: $extraZerosToast, duration: 2, tapToDismiss: false) {
+            AlertToast(displayMode: .hud, type: .regular, title: "по тебе новинки плачут")
         }
         .toast(isPresenting: $invalidInputToast, duration: 2, tapToDismiss: false) {
             AlertToast(displayMode: .hud, type: .regular, title: "хуйня переделывай")
@@ -178,12 +193,25 @@ struct ConverterView: View {
     func buttonTap(button: Buttons) {
         switch button {
         case .left:
+            if cursorIndex > 0 {
+                var characters = Array(input)
+                characters.swapAt(cursorIndex - 1, cursorIndex)
+                self.input = String(characters)
+                self.cursorIndex -= 1
+            }
             break
         case .right:
+            if cursorIndex < input.replacingOccurrences(of: "|", with: "").count {
+                var characters = Array(input)
+                characters.swapAt(cursorIndex, cursorIndex + 1)
+                self.input = String(characters)
+                self.cursorIndex += 1
+            }
             break
         case .swap:
-            if output.count < 15 {
-                self.input = output
+            if output.replacingOccurrences(of: ".", with: "").count <= 15 {
+                self.cursorIndex = output.count
+                self.input = "\(output)\("|")"
             }
             else {
                 self.symbolLimitToast.toggle()
@@ -195,7 +223,12 @@ struct ConverterView: View {
             break
         case .paste:
             if var myString = UIPasteboard.general.string {
-                myString = myString.replacingOccurrences(of: ",", with: ".")
+                if input.replacingOccurrences(of: "|", with: "") == "0" {
+                    myString = "\(myString.replacingOccurrences(of: ",", with: "."))"
+                }
+                else {
+                    myString = "\(input.replacingOccurrences(of: "|", with: ""))\(myString.replacingOccurrences(of: ",", with: "."))"
+                }
                 if myString.count > 15 || myString.count == 15 && myString.last == "." {
                     self.symbolLimitToast.toggle()
                     break
@@ -214,32 +247,70 @@ struct ConverterView: View {
                 }
                 
                 clearInput()
-                self.input = myString
+                self.cursorIndex = myString.count
+                self.input = "\(myString)\("|")"
+                self.pasteToast.toggle()
             }
             break
         case .remove:
-            if input.count > 1 {
-                self.input.removeLast()
+            if input.replacingOccurrences(of: "|", with: "").count > 1 && cursorIndex > 0 {
+                self.input = input.replacingOccurrences(of: "|", with: "")
+                
+                var start = input.prefix(cursorIndex - 1)
+                var end = input.suffix(input.count - cursorIndex)
+                
+                self.input = "\(start)\("|")\(end)"
+                self.cursorIndex -= 1
             }
-            else {
-                self.input = "0"
+            else if input.replacingOccurrences(of: "|", with: "").count == 1 {
+                self.input = "0|"
+                self.cursorIndex = 1
             }
             break
         case .clear:
             clearInput()
             break
         case .dot:
-            if !input.contains(".") && input.count < 14 {
-                self.input = "\(self.input)\(button.rawValue)"
+            if input.contains(".") {
+                self.extraDotsToast.toggle()
+            }
+            else if input.replacingOccurrences(of: "|", with: "").replacingOccurrences(of: ".", with: "").count < 15{
+                self.input = input.replacingOccurrences(of: "|", with: "")
+                var start = input.prefix(cursorIndex)
+                var end = input.suffix(input.count - cursorIndex)
+                self.input = "\(start)\(button.rawValue)\("|")\(end)"
+                self.cursorIndex += 1
+            }
+            else {
+                self.symbolLimitToast.toggle()
             }
             break
         default:
-            if input.count < 15 {
-                if self.input == "0" {
-                    input =  button.rawValue
+            if input.replacingOccurrences(of: "|", with: "").replacingOccurrences(of: ".", with: "").count < 15 {
+                let buf = input
+                
+                if self.input == "0|" && button != .zero {
+                    self.input =  button.rawValue + "|"
                 }
                 else {
-                    self.input = "\(self.input)\( button.rawValue)"
+                    self.input = input.replacingOccurrences(of: "|", with: "")
+                    let start = input.prefix(cursorIndex)
+                    let end = input.suffix(input.count - cursorIndex)
+                    
+                    let length = input.count
+                    
+                    if String(Double("\(start)\(button.rawValue)\(end)") ?? 0).prefix(length + 1) ==  "\(start)\(button.rawValue)\(end)".prefix(length + 1) {
+                        self.input = "\(start)\(button.rawValue)\("|")\(end)"
+                        self.cursorIndex += 1
+                    }
+                    else if input.contains(".") && (input.firstIndex(of: ".")?.utf16Offset(in: input))! < cursorIndex {
+                        self.input = "\(start)\(button.rawValue)\("|")\(end)"
+                        self.cursorIndex += 1
+                    }
+                    else {
+                        self.extraZerosToast.toggle()
+                        self.input = buf
+                    }
                 }
             }
             else {
