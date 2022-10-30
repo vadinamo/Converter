@@ -11,7 +11,7 @@ import SwiftUI
 struct ConverterApp: App {
     var body: some Scene {
         WindowGroup {
-            ConverterView(vm: ConverterViewModel())
+            ConverterView(vm: ConverterViewModel(symbol: "|"))
         }
     }
 }
