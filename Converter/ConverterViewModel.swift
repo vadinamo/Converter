@@ -108,10 +108,11 @@ class ConverterViewModel: ObservableObject {
             }
             
             if myString.filter({ $0 == "." }).count > 1 {
-                return "Gavno"
+                return "Extra"
             }
             
             clearInput()
+            myString = String(Double(myString) ?? 0)
             self.cursorIndex = myString.count
             self.input = "\(myString)\("|")"
             return "Pasted"

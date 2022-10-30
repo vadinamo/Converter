@@ -183,6 +183,9 @@ struct ConverterView: View {
             case "Limit":
                 self.symbolLimitToast.toggle()
                 break
+            case "Extra":
+                self.extraDotsToast.toggle()
+                break
             case "Gavno":
                 self.invalidInputToast.toggle()
                 break
