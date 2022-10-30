@@ -10,12 +10,7 @@ import AlertToast
 
 struct ConverterView: View {
     @State private var orientation = UIDevice.current.orientation
-    @State private var cursorIndex = 1
-    
-    @State var currentCategory: Int = 0
-    
-    @State var type1: Int = 0
-    @State var type2: Int = 0
+    @ObservedObject var vm: ConverterViewModel
     
     @State var copyToast = false
     @State var pasteToast = false
@@ -24,34 +19,6 @@ struct ConverterView: View {
     @State var extraDotsToast = false
     @State var extraZerosToast = false
     @State var swapToast = false
-    
-    @State var input: String = "0|"
-    var output: String {
-        let value = Double(input.replacingOccurrences(of: "|", with: "")) ?? 0
-        var result = String(value / valueCoefficients[currentCategory][type1] * valueCoefficients[currentCategory][type2])
-        if String(result.suffix(2)) == ".0" {
-            result.removeLast(2)
-        }
-        
-        return result
-    }
-    
-    var width: CGFloat {
-        if UIScreen.main.bounds.height > UIScreen.main.bounds.width {
-            return UIScreen.main.bounds.width
-        }
-        else {
-            return UIScreen.main.bounds.height
-        }
-    }
-    var count: CGFloat {
-        if UIScreen.main.bounds.height > UIScreen.main.bounds.width {
-            return 4
-        }
-        else {
-            return 5
-        }
-    }
     
     let buttons: [[Buttons]] = [
         [.left, .right, .swap],
@@ -92,27 +59,22 @@ struct ConverterView: View {
     
     func buttonWidth(item: Buttons) -> CGFloat {
         if item == .zero {
-            return (width - (4 * 12)) / count * 2
+            return (vm.width - (4 * 12)) / vm.count * 2
         }
         else if item == .left || item == .right {
-            return (width - (4 * 12)) / count * 3 / 2
+            return (vm.width - (4 * 12)) / vm.count * 3 / 2
         }
             
-        return (width - (5 * 12)) / count
+        return (vm.width - (5 * 12)) / vm.count
     }
     
     func buttonHeight(item: Buttons) -> CGFloat {
-        return (width - (5 * 12)) / count
-    }
-    
-    func clearInput() {
-        self.cursorIndex = 1
-        self.input = "0|"
+        return (vm.width - (5 * 12)) / vm.count
     }
     
     @ViewBuilder
     var inputs: some View {
-        Picker("Category", selection: $currentCategory) {
+        Picker("Category", selection: $vm.currentCategory) {
             ForEach(0..<unitCategories.count) {
                 Text(unitCategories[$0])
                     .font(.largeTitle)
@@ -144,28 +106,28 @@ struct ConverterView: View {
         Spacer()
         
         HStack {
-            Picker("From type", selection: $type1) {
-                ForEach(0..<unitTypes[currentCategory].count) {
-                    Text(unitTypes[currentCategory][$0])
+            Picker("From type", selection: $vm.type1) {
+                ForEach(0..<unitTypes[vm.currentCategory].count) {
+                    Text(unitTypes[vm.currentCategory][$0])
                         .font(.largeTitle)
                 }
             }
             Spacer()
-            Text(input)
+            Text(vm.input)
                 .font(.system(size: 18)).padding()
         }
         
         Spacer()
         
         HStack {
-            Picker("To type", selection: $type2) {
-                ForEach(0..<unitTypes[currentCategory].count) {
-                    Text(unitTypes[currentCategory][$0])
+            Picker("To type", selection: $vm.type2) {
+                ForEach(0..<unitTypes[vm.currentCategory].count) {
+                    Text(unitTypes[vm.currentCategory][$0])
                         .font(.largeTitle)
                 }
             }
             Spacer()
-            Text(output)
+            Text(vm.output)
                 .font(.system(size: 18)).padding()
         }
         
@@ -197,146 +159,66 @@ struct ConverterView: View {
     func buttonTap(button: Buttons) {
         switch button {
         case .left:
-            if cursorIndex > 0 {
-                var characters = Array(input)
-                characters.swapAt(cursorIndex - 1, cursorIndex)
-                self.input = String(characters)
-                self.cursorIndex -= 1
-            }
+            vm.cursorMoveLeft()
             break
         case .right:
-            if cursorIndex < input.replacingOccurrences(of: "|", with: "").count {
-                var characters = Array(input)
-                characters.swapAt(cursorIndex, cursorIndex + 1)
-                self.input = String(characters)
-                self.cursorIndex += 1
-            }
+            vm.cursorMoveRight()
             break
         case .swap:
-            if output.replacingOccurrences(of: ".", with: "").count <= 15 {
-                self.cursorIndex = output.count
-                self.input = "\(output)\("|")"
-                let buf = type1
-                self.type1 = type2
-                self.type2 = buf
-                self.swapToast.toggle()
-            }
-            else {
+            switch vm.swap() {
+            case "Swapped":
+                self.copyToast.toggle()
+                break
+            default:
                 self.symbolLimitToast.toggle()
+                break
             }
             break
         case .copy:
-            UIPasteboard.general.string = output
+            vm.copy()
             self.copyToast.toggle()
             break
         case .paste:
-            if var myString = UIPasteboard.general.string {
-                if input.replacingOccurrences(of: "|", with: "") == "0" {
-                    myString = "\(myString.replacingOccurrences(of: ",", with: "."))"
-                }
-                else {
-                    myString = "\(input.replacingOccurrences(of: "|", with: ""))\(myString.replacingOccurrences(of: ",", with: "."))"
-                }
-                if myString.count > 15 || myString.count == 15 && myString.last == "." {
-                    self.symbolLimitToast.toggle()
-                    break
-                }
-                    
-                let re = "[.0-9]+"
-                let stringToCheck = myString.replacingOccurrences(of: re, with: "", options: [.regularExpression])
-                if stringToCheck.count != 0 {
-                    self.invalidInputToast.toggle()
-                    break
-                }
-                
-                if myString.filter({ $0 == "." }).count > 1 {
-                    self.invalidInputToast.toggle()
-                    break
-                }
-                
-                clearInput()
-                self.cursorIndex = myString.count
-                self.input = "\(myString)\("|")"
+            switch vm.paste() {
+            case "Limit":
+                self.symbolLimitToast.toggle()
+                break
+            case "Gavno":
+                self.invalidInputToast.toggle()
+                break
+            default:
                 self.pasteToast.toggle()
+                break
             }
             break
         case .remove:
-            if input.replacingOccurrences(of: "|", with: "").count > 1 && cursorIndex > 0 {
-                self.input = input.replacingOccurrences(of: "|", with: "")
-                
-                let start = input.prefix(cursorIndex - 1)
-                let end = input.suffix(input.count - cursorIndex)
-                
-                let string = "\(start)\("|")\(end)"
-                var convertedString = String(Double(string.replacingOccurrences(of: "|", with: "")) ?? 0)
-                if String(convertedString.suffix(2)) == ".0" {
-                    convertedString.removeLast(2)
-                }
-                if string.replacingOccurrences(of: "|", with: "") != convertedString && string.replacingOccurrences(of: "|", with: "") != "\(convertedString)\(".")" {
-                    self.input = "\("|")\(String(Double(string.replacingOccurrences(of: "|", with: "")) ?? 0))"
-                    if String(input.suffix(2)) == ".0" {
-                        self.input.removeLast(2)
-                    }
-                    self.cursorIndex = 0
-                }
-                else {
-                    self.input = string
-                    self.cursorIndex -= 1
-                }
-            }
-            else if input.replacingOccurrences(of: "|", with: "").count == 1 &&  input.replacingOccurrences(of: "|", with: "") != "0"{
-                self.input = "0|"
-                self.cursorIndex = 1
-            }
+            vm.remove()
             break
         case .clear:
-            clearInput()
+            vm.clearInput()
             break
         case .dot:
-            if input.contains(".") {
+            switch vm.dot() {
+            case "Extra":
                 self.extraDotsToast.toggle()
-            }
-            else if input.replacingOccurrences(of: "|", with: "").replacingOccurrences(of: ".", with: "").count <= 15 && cursorIndex != 15 {
-                self.input = input.replacingOccurrences(of: "|", with: "")
-                let start = input.prefix(cursorIndex)
-                let end = input.suffix(input.count - cursorIndex)
-                self.input = "\(start)\(button.rawValue)\("|")\(end)"
-                self.cursorIndex += 1
-            }
-            else {
+                break
+            case "Limit":
                 self.symbolLimitToast.toggle()
+                break
+            default:
+                break
             }
             break
         default:
-            if input.replacingOccurrences(of: "|", with: "").replacingOccurrences(of: ".", with: "").count < 15 {
-                let buf = input
-                
-                if self.input == "0|" && button != .zero {
-                    self.input =  button.rawValue + "|"
-                }
-                else {
-                    self.input = input.replacingOccurrences(of: "|", with: "")
-                    let start = input.prefix(cursorIndex)
-                    let end = input.suffix(input.count - cursorIndex)
-                    
-                    let length = input.count
-                    
-                    if String(Double("\(start)\(button.rawValue)\(end)") ?? 0).prefix(length + 1) ==  "\(start)\(button.rawValue)\(end)".prefix(length + 1) {
-                        self.input = "\(start)\(button.rawValue)\("|")\(end)"
-                        self.cursorIndex += 1
-                    }
-                    else if input.contains(".") && (input.firstIndex(of: ".")?.utf16Offset(in: input))! < cursorIndex {
-                        self.input = "\(start)\(button.rawValue)\("|")\(end)"
-                        self.cursorIndex += 1
-                    }
-                    else {
-                        self.extraZerosToast.toggle()
-                        self.input = buf
-                    }
-                }
-            }
-            else {
+            switch vm.inputNumber(number: button.rawValue) {
+            case "ExtraZeros":
+                self.extraZerosToast.toggle()
+                break
+            case "Limit":
                 self.symbolLimitToast.toggle()
+                break
+            default:
+                break
             }
             break
         }
@@ -359,23 +241,5 @@ struct DeviceRotationViewModifier: ViewModifier {
 extension View {
     func onRotate(perform action: @escaping (UIDeviceOrientation) -> Void) -> some View {
         self.modifier(DeviceRotationViewModifier(action: action))
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ConverterView()
-            .preferredColorScheme(.dark)
     }
 }

@@ -14,6 +14,7 @@
 		BE9782D228CC646400AA6DBF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE9782D128CC646400AA6DBF /* Assets.xcassets */; };
 		BE9782D528CC646400AA6DBF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE9782D428CC646400AA6DBF /* Preview Assets.xcassets */; };
 		BE9D2DC92909896100A996E8 /* ValuesCoefficients.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9D2DC82909896100A996E8 /* ValuesCoefficients.swift */; };
+		BEAE3706290E73F10053EEF2 /* ConverterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEAE3705290E73F10053EEF2 /* ConverterViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		BE9782D128CC646400AA6DBF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BE9782D428CC646400AA6DBF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		BE9D2DC82909896100A996E8 /* ValuesCoefficients.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValuesCoefficients.swift; sourceTree = "<group>"; };
+		BEAE3705290E73F10053EEF2 /* ConverterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 			children = (
 				BE9782CD28CC645F00AA6DBF /* ConverterApp.swift */,
 				BE5F1A5B2909560D00CEB73F /* ConverterView.swift */,
+				BEAE3705290E73F10053EEF2 /* ConverterViewModel.swift */,
 				BE9D2DC82909896100A996E8 /* ValuesCoefficients.swift */,
 				BE5F1A5929094A5F00CEB73F /* Buttons.swift */,
 				BE9782D128CC646400AA6DBF /* Assets.xcassets */,
@@ -152,6 +155,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE5F1A5A29094A5F00CEB73F /* Buttons.swift in Sources */,
+				BEAE3706290E73F10053EEF2 /* ConverterViewModel.swift in Sources */,
 				BE9D2DC92909896100A996E8 /* ValuesCoefficients.swift in Sources */,
 				BE5F1A5C2909560D00CEB73F /* ConverterView.swift in Sources */,
 				BE9782CE28CC645F00AA6DBF /* ConverterApp.swift in Sources */,
