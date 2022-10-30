@@ -19,6 +19,7 @@ struct ConverterView: View {
     @State var extraDotsToast = false
     @State var extraZerosToast = false
     @State var swapToast = false
+    @State var BomjToast = false
     
     let buttons: [[Buttons]] = [
         [.left, .right, .swap],
@@ -102,6 +103,9 @@ struct ConverterView: View {
         .toast(isPresenting: $symbolLimitToast, duration: 3, tapToDismiss: false) {
             AlertToast(displayMode: .hud, type: .error(.red), title: "Max input length is 15 numbers")
         }
+        .toast(isPresenting: $BomjToast, duration: 3, tapToDismiss: false) {
+            AlertToast(displayMode: .hud, type: .error(.yellow), title: "Buy premium to use swap and copy functions")
+        }
         
         Spacer()
         
@@ -167,16 +171,23 @@ struct ConverterView: View {
         case .swap:
             switch vm.swap() {
             case "Swapped":
-                self.copyToast.toggle()
+                self.swapToast.toggle()
+                break
+            case "Limit":
+                self.symbolLimitToast.toggle()
                 break
             default:
-                self.symbolLimitToast.toggle()
+                self.BomjToast.toggle()
                 break
             }
             break
         case .copy:
-            vm.copy()
-            self.copyToast.toggle()
+            switch vm.copy() {
+            case "Copied":
+                self.copyToast.toggle()
+            default:
+                self.BomjToast.toggle()
+            }
             break
         case .paste:
             switch vm.paste() {

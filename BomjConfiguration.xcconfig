@@ -1,0 +1,11 @@
+//
+//  BomjConfiguration.xcconfig
+//  Converter
+//
+//  Created by Вадим Юрьев on 31.10.22.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+PREMIUM = false

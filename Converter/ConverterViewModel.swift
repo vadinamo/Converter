@@ -8,6 +8,8 @@
 import SwiftUI
 
 class ConverterViewModel: ObservableObject {
+    let isPremium: String
+    
     @Published private var cursorIndex = 1
     var cursorSymbol: String
     
@@ -48,6 +50,7 @@ class ConverterViewModel: ObservableObject {
     init(symbol: String) {
         self.cursorSymbol = symbol
         self.input = "\("0")\(symbol)"
+        self.isPremium = Bundle.main.infoDictionary?["Premium"] as! String
     }
     
     func clearInput() {
@@ -74,6 +77,9 @@ class ConverterViewModel: ObservableObject {
     }
     
     func swap() -> String {
+        if isPremium == "false" {
+            return "Bomj"
+        }
         if output.replacingOccurrences(of: ".", with: "").count <= 15 {
             cursorIndex = output.count
             input = "\(output)\(cursorSymbol)"
@@ -87,8 +93,12 @@ class ConverterViewModel: ObservableObject {
         }
     }
     
-    func copy() {
+    func copy() -> String {
+        if isPremium == "false" {
+            return "Bomj"
+        }
         UIPasteboard.general.string = output
+        return "Copied"
     }
     
     func paste() -> String {
