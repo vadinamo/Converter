@@ -22,14 +22,25 @@ class ConverterViewModel: ObservableObject {
     @Published var input: String = ""
     var output: String {
         let value = BigDecimal(input.replacingOccurrences(of: cursorSymbol, with: "")) ?? 0
-        var result = String(value / valueCoefficients[currentCategory][type1] * valueCoefficients[currentCategory][type2])
+        var result = String(value * valueCoefficients[currentCategory][type1] / valueCoefficients[currentCategory][type2])
 
         if result.replacingOccurrences(of: ".", with: "").replacingOccurrences(of: "0", with: "").count == 0 {
             return "0"
         }
         
-        if result.count > 20 {
-            result = String(result.prefix(20))
+        if result.count > 30 {
+            result = String(result.prefix(30))
+        }
+        
+        let resultArr = Array(result.reversed())
+        
+        for i in 0...(resultArr.count - 1) {
+            if resultArr[i] == "0" {
+                result.removeLast()
+            }
+            else {
+                break
+            }
         }
         
         return result
