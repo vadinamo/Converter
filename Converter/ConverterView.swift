@@ -81,6 +81,10 @@ struct ConverterView: View {
                     .font(.largeTitle)
             }
         }
+        .onChange(of: vm.currentCategory, perform: {
+            (value) in
+            vm.clearInput()
+        })
         .pickerStyle(SegmentedPickerStyle())
         .toast(isPresenting: $copyToast, duration: 1, tapToDismiss: false) {
             AlertToast(displayMode: .hud, type: .regular, title: "Copied")
