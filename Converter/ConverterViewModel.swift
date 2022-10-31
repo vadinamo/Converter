@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import BigDecimal
 
 class ConverterViewModel: ObservableObject {
     let isPremium: String
@@ -20,10 +21,15 @@ class ConverterViewModel: ObservableObject {
     
     @Published var input: String = ""
     var output: String {
-        let value = Double(input.replacingOccurrences(of: cursorSymbol, with: "")) ?? 0
+        let value = BigDecimal(input.replacingOccurrences(of: cursorSymbol, with: "")) ?? 0
         var result = String(value / valueCoefficients[currentCategory][type1] * valueCoefficients[currentCategory][type2])
-        if String(result.suffix(2)) == ".0" {
-            result.removeLast(2)
+
+        if result.replacingOccurrences(of: ".", with: "").replacingOccurrences(of: "0", with: "").count == 0 {
+            return "0"
+        }
+        
+        if result.count > 20 {
+            result = String(result.prefix(20))
         }
         
         return result
@@ -129,7 +135,7 @@ class ConverterViewModel: ObservableObject {
                 return "Extra"
             }
             
-            if myString.prefix(myString.count) == String(Double(myString) ?? 0).prefix(myString.count) {
+            if myString.prefix(myString.count) == String(BigDecimal(myString) ?? 0).prefix(myString.count) {
                 self.cursorIndex += length
                 
                 let start = myString.prefix(cursorIndex)
@@ -152,12 +158,12 @@ class ConverterViewModel: ObservableObject {
             let end = input.suffix(input.count - cursorIndex)
             
             let string = "\(start)\(cursorSymbol)\(end)"
-            var convertedString = String(Double(string.replacingOccurrences(of: cursorSymbol, with: "")) ?? 0)
+            var convertedString = String(BigDecimal(string.replacingOccurrences(of: cursorSymbol, with: "")) ?? 0)
             if String(convertedString.suffix(2)) == ".0" {
                 convertedString.removeLast(2)
             }
             if string.replacingOccurrences(of: cursorSymbol, with: "") != convertedString && string.replacingOccurrences(of: cursorSymbol, with: "") != "\(convertedString)\(".")" {
-                self.input = "\(cursorSymbol)\(String(Double(string.replacingOccurrences(of: cursorSymbol, with: "")) ?? 0))"
+                self.input = "\(cursorSymbol)\(String(BigDecimal(string.replacingOccurrences(of: cursorSymbol, with: "")) ?? 0))"
                 if String(input.suffix(2)) == ".0" {
                     self.input.removeLast(2)
                 }
@@ -205,7 +211,7 @@ class ConverterViewModel: ObservableObject {
                 
                 let length = input.count
                 
-                if String(Double("\(start)\(number)\(end)") ?? 0).prefix(length + 1) ==  "\(start)\(number)\(end)".prefix(length + 1) {
+                if String(BigDecimal("\(start)\(number)\(end)") ?? 0).prefix(length + 1) ==  "\(start)\(number)\(end)".prefix(length + 1) {
                     self.input = "\(start)\(number)\(cursorSymbol)\(end)"
                     self.cursorIndex += 1
                 }

@@ -14,6 +14,7 @@
 		BE9782D228CC646400AA6DBF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE9782D128CC646400AA6DBF /* Assets.xcassets */; };
 		BE9782D528CC646400AA6DBF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE9782D428CC646400AA6DBF /* Preview Assets.xcassets */; };
 		BE9D2DC92909896100A996E8 /* ValuesCoefficients.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9D2DC82909896100A996E8 /* ValuesCoefficients.swift */; };
+		BEA7BF02290FD17900AACD0F /* BigDecimal in Frameworks */ = {isa = PBXBuildFile; productRef = BEA7BF01290FD17900AACD0F /* BigDecimal */; };
 		BEAE3706290E73F10053EEF2 /* ConverterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEAE3705290E73F10053EEF2 /* ConverterViewModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +38,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE81736D2909EA450059BB7C /* AlertToast in Frameworks */,
+				BEA7BF02290FD17900AACD0F /* BigDecimal in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,6 +104,7 @@
 			name = Converter;
 			packageProductDependencies = (
 				BE81736C2909EA450059BB7C /* AlertToast */,
+				BEA7BF01290FD17900AACD0F /* BigDecimal */,
 			);
 			productName = Converter;
 			productReference = BE9782CA28CC645F00AA6DBF /* Converter.app */;
@@ -133,6 +136,7 @@
 			mainGroup = BE9782C128CC645F00AA6DBF;
 			packageReferences = (
 				BE81736B2909EA450059BB7C /* XCRemoteSwiftPackageReference "AlertToast" */,
+				BEA7BF00290FD17900AACD0F /* XCRemoteSwiftPackageReference "BigDecimal" */,
 			);
 			productRefGroup = BE9782CB28CC645F00AA6DBF /* Products */;
 			projectDirPath = "";
@@ -381,6 +385,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		BEA7BF00290FD17900AACD0F /* XCRemoteSwiftPackageReference "BigDecimal" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Zollerboy1/BigDecimal";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -388,6 +400,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BE81736B2909EA450059BB7C /* XCRemoteSwiftPackageReference "AlertToast" */;
 			productName = AlertToast;
+		};
+		BEA7BF01290FD17900AACD0F /* BigDecimal */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BEA7BF00290FD17900AACD0F /* XCRemoteSwiftPackageReference "BigDecimal" */;
+			productName = BigDecimal;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
