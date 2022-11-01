@@ -32,14 +32,20 @@ class ConverterViewModel: ObservableObject {
             result = String(result.prefix(30))
         }
         
-        let resultArr = Array(result.reversed())
-        
-        for i in 0...(resultArr.count - 1) {
-            if resultArr[i] == "0" {
-                result.removeLast()
-            }
-            else {
-                break
+        if result.contains(".") {
+            let resultArr = Array(result.reversed())
+            
+            for i in 0...(resultArr.count - 1) {
+                if resultArr[i] == "0" {
+                    result.removeLast()
+                }
+                else if resultArr[i] == "." {
+                    result.removeLast()
+                    break
+                }
+                else {
+                    break
+                }
             }
         }
         
@@ -120,13 +126,13 @@ class ConverterViewModel: ObservableObject {
     
     func paste() -> String {
         if var myString = UIPasteboard.general.string {
-            var length = myString.count
+            let length = myString.count
             if input.replacingOccurrences(of: cursorSymbol, with: "") == "0" {
                 myString = "\(myString.replacingOccurrences(of: ",", with: "."))"
                 self.cursorIndex = 0
             }
             else {
-                var str = input.replacingOccurrences(of: cursorSymbol, with: "")
+                let str = input.replacingOccurrences(of: cursorSymbol, with: "")
                 let start = str.prefix(cursorIndex)
                 let end = str.suffix(str.count - cursorIndex)
                 
