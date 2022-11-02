@@ -138,7 +138,7 @@ class ConverterViewModel: ObservableObject {
                 
                 myString = "\(start)\(myString.replacingOccurrences(of: ",", with: "."))\(end)"
             }
-            if myString.count > 15 || myString.count == 15 && myString.last == "." {
+            if myString.replacingOccurrences(of: ".", with: "").count > 15 || myString.count == 16 && myString.last == "." {
                 return "Limit"
             }
                 
