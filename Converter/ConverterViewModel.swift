@@ -179,7 +179,7 @@ class ConverterViewModel: ObservableObject {
             if String(convertedString.suffix(2)) == ".0" {
                 convertedString.removeLast(2)
             }
-            if string.replacingOccurrences(of: cursorSymbol, with: "") != convertedString && string.replacingOccurrences(of: cursorSymbol, with: "") != "\(convertedString)\(".")" {
+            if string.replacingOccurrences(of: cursorSymbol, with: "").first != "." && string.replacingOccurrences(of: cursorSymbol, with: "") != convertedString && string.replacingOccurrences(of: cursorSymbol, with: "") != "\(convertedString)\(".")" {
                 self.input = "\(cursorSymbol)\(String(BigDecimal(string.replacingOccurrences(of: cursorSymbol, with: "")) ?? 0))"
                 if String(input.suffix(2)) == ".0" {
                     self.input.removeLast(2)
