@@ -29,7 +29,7 @@ class ConverterViewModel: ObservableObject {
         }
         
         if result.count > 30 {
-            result = String(result.prefix(30))
+                result = String(result.prefix(30))
         }
         
         if result.contains(".") {
@@ -109,11 +109,17 @@ class ConverterViewModel: ObservableObject {
             let buf = type1
             type1 = type2
             type2 = buf
-            return "Swapped"
+            
         }
         else {
-            return "Limit"
+            cursorIndex = 15
+            input = "\(output.prefix(15))\(cursorSymbol)"
+            let buf = type1
+            type1 = type2
+            type2 = buf
+            return "SwapLimit"
         }
+        return "Swapped"
     }
     
     func copy() -> String {

@@ -19,6 +19,7 @@ struct ConverterView: View {
     @State var extraDotsToast = false
     @State var extraZerosToast = false
     @State var swapToast = false
+    @State var swapLimitToast = false
     @State var BomjToast = false
     
     let buttons: [[Buttons]] = [
@@ -95,14 +96,17 @@ struct ConverterView: View {
         .toast(isPresenting: $swapToast, duration: 1, tapToDismiss: false) {
             AlertToast(displayMode: .hud, type: .regular, title: "Swaped")
         }
+        .toast(isPresenting: $swapLimitToast, duration: 2, tapToDismiss: false) {
+            AlertToast(displayMode: .hud, type: .error(.red), title: "Cutted to 15 symbols")
+        }
         .toast(isPresenting: $extraDotsToast, duration: 2, tapToDismiss: false) {
             AlertToast(displayMode: .hud, type: .error(.red), title: "Input can contain only one dot")
         }
         .toast(isPresenting: $extraZerosToast, duration: 2, tapToDismiss: false) {
-            AlertToast(displayMode: .hud, type: .regular, title: "по тебе новинки плачут")
+            AlertToast(displayMode: .hud, type: .regular, title: "Wrong input")
         }
-        .toast(isPresenting: $invalidInputToast, duration: 2, tapToDismiss: false) {
-            AlertToast(displayMode: .hud, type: .regular, title: "хуйня переделывай")
+        .toast(isPresenting: $invalidInputToast, duration: 1, tapToDismiss: false) {
+            AlertToast(displayMode: .hud, type: .regular, title: "Invalid paste")
         }
         .toast(isPresenting: $symbolLimitToast, duration: 3, tapToDismiss: false) {
             AlertToast(displayMode: .hud, type: .error(.red), title: "Max input length is 15 numbers")
@@ -177,8 +181,8 @@ struct ConverterView: View {
             case "Swapped":
                 self.swapToast.toggle()
                 break
-            case "Limit":
-                self.symbolLimitToast.toggle()
+            case "SwapLimit":
+                self.swapLimitToast.toggle()
                 break
             default:
                 self.BomjToast.toggle()

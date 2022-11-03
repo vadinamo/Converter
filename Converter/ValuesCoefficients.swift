@@ -11,13 +11,13 @@ let unitCategories = ["Distance", "Weight", "Currency"]
 
 let unitTypes = [
     ["Meters", "Kilometers", "Miles"],
-    ["Grams", "Kilograms", "Pounds"],
+    ["Grams", "Kilograms", "Milligrams"],
     ["USD", "BYN", "RUB"]
 ]
 
 let valueCoefficients: [[BigDecimal]] = [
     [1, 1000, 1609.34],
-    [1, 1000, 453.592],
-    [1,  1 / 2.4768,  1 / 61.3084]
+    [1, 1000, 0.001],
+    [1,  1 / 2.5,  1 / 64]
 ]
 
