@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BE33F02D29225116009F827F /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE33F02C29225116009F827F /* TimerView.swift */; };
 		BE75D2832921A694000A06D4 /* TimerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE75D2822921A694000A06D4 /* TimerApp.swift */; };
 		BE75D2852921A694000A06D4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE75D2842921A694000A06D4 /* ContentView.swift */; };
 		BE75D2872921A696000A06D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE75D2862921A696000A06D4 /* Assets.xcassets */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BE33F02C29225116009F827F /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		BE75D27F2921A694000A06D4 /* Timer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Timer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE75D2822921A694000A06D4 /* TimerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerApp.swift; sourceTree = "<group>"; };
 		BE75D2842921A694000A06D4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -36,6 +38,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BE33F02B292250D7009F827F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				BE33F02C29225116009F827F /* TimerView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		BE75D2762921A694000A06D4 = {
 			isa = PBXGroup;
 			children = (
@@ -55,6 +65,7 @@
 		BE75D2812921A694000A06D4 /* Timer */ = {
 			isa = PBXGroup;
 			children = (
+				BE33F02B292250D7009F827F /* Views */,
 				BEB99E8B2921CC7400F2CDC2 /* Extensions */,
 				BE75D2822921A694000A06D4 /* TimerApp.swift */,
 				BE75D2842921A694000A06D4 /* ContentView.swift */,
@@ -151,6 +162,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE33F02D29225116009F827F /* TimerView.swift in Sources */,
 				BE75D2852921A694000A06D4 /* ContentView.swift in Sources */,
 				BEB99E8D2921CC8100F2CDC2 /* Color.swift in Sources */,
 				BE75D2832921A694000A06D4 /* TimerApp.swift in Sources */,

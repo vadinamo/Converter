@@ -23,8 +23,24 @@ struct ContentView: View {
     var body: some View {
         TabView {
             TimerView
+                .tabItem {
+                    Image(systemName: "timer.circle.fill")
+                    Text((currentLanguage == "English") ?
+                         "Timer" : "Таймер")
+                    
+                }
             SequenceView
+                .tabItem {
+                    Image(systemName: "list.bullet.clipboard")
+                    Text((currentLanguage == "English") ?
+                         "Sequences" : "Последовательности")
+                }
             SettingsView
+                .tabItem {
+                    Image(systemName: "gearshape.fill")
+                    Text((currentLanguage == "English") ?
+                         "Settings" : "Настройки")
+                }
         }
         .accentColor(Color.Accent)
         .font(.system(size: CGFloat(fontSizes[currentFontSize] ?? 0)))
@@ -33,59 +49,59 @@ struct ContentView: View {
     
     @ViewBuilder
     var TimerView: some View {
-        VStack {
-            HStack {
-                Button(action: {}, label: {
-                    Image(systemName: "plus.circle.fill")
-                })
+        NavigationView {
+            VStack {
+                HStack {
+                    NavigationLink {
+                        NewTimerView
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                    }
+                    
+                    Spacer()
+                    
+                    Button(action: {}, label: {
+                        Image(systemName: "square.and.pencil.circle.fill")
+                    })
+                }
+                .font(.system(size: CGFloat(fontSizes[currentFontSize] ?? 0)))
+                
+                Text((currentLanguage == "English") ?
+                     "Timer" : "Таймер")
+                
                 Spacer()
-                Button(action: {}, label: {
-                    Image(systemName: "square.and.pencil.circle.fill")
-                })
+                Divider()
             }
-            .font(.system(size: CGFloat(fontSizes[currentFontSize] ?? 0)))
-            
-            Text((currentLanguage == "English") ?
-                 "Timer" : "Таймер")
-            
-            Spacer()
-            Divider()
+            .padding()
         }
-        .padding()
-        .tabItem {
-            Image(systemName: "timer.circle.fill")
-            Text((currentLanguage == "English") ?
-                 "Timer" : "Таймер")
-            
-        }
-        
     }
     
     @ViewBuilder
     var SequenceView: some View {
-        VStack {
-            HStack {
-                Button(action: {}, label: {
-                    Image(systemName: "plus.circle.fill")
-                })
+        NavigationView {
+            VStack {
+                HStack {
+                    NavigationLink {
+                        NewSequenceView
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                    }
+                    
+                    Spacer()
+                    
+                    Button(action: {}, label: {
+                        Image(systemName: "square.and.pencil.circle.fill")
+                    })
+                }
+                .font(.system(size: CGFloat(fontSizes[currentFontSize] ?? 0)))
+                
+                Text((currentLanguage == "English") ?
+                     "Sequences" : "Последовательности")
+                
                 Spacer()
-                Button(action: {}, label: {
-                    Image(systemName: "square.and.pencil.circle.fill")
-                })
+                Divider()
             }
-            .font(.system(size: CGFloat(fontSizes[currentFontSize] ?? 0)))
-            
-            Text((currentLanguage == "English") ?
-                 "Sequences" : "Последовательности")
-            
-            Spacer()
-            Divider()
-        }
-        .padding()
-        .tabItem {
-            Image(systemName: "list.bullet.clipboard")
-            Text((currentLanguage == "English") ?
-                 "Sequences" : "Последовательности")
+            .padding()
         }
     }
     
@@ -124,10 +140,49 @@ struct ContentView: View {
             Spacer()
             Divider()
         }
-        .tabItem {
-            Image(systemName: "gearshape.fill")
-            Text((currentLanguage == "English") ?
-                 "Settings" : "Настройки")
+        .padding()
+    }
+    
+    @ViewBuilder
+    var NewTimerView: some View {
+        VStack {
+            Text("*new timer creating*")
+            
+            Spacer()
+            
+            Button(action: {}, label: {
+                Text((currentLanguage == "English") ?
+                     "Create" : "Создать")
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .padding()
+                    .foregroundColor(Color.Accent)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 25)
+                            .stroke(Color.Accent, lineWidth: 2)
+                    )
+            })
+        }
+        .padding()
+    }
+    
+    @ViewBuilder
+    var NewSequenceView: some View {
+        VStack {
+            Text("*new sequence creating*")
+            
+            Spacer()
+            
+            Button(action: {}, label: {
+                Text((currentLanguage == "English") ?
+                     "Create" : "Создать")
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .padding()
+                    .foregroundColor(Color.Accent)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 25)
+                            .stroke(Color.Accent, lineWidth: 2)
+                    )
+            })
         }
         .padding()
     }
