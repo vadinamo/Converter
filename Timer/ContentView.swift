@@ -21,14 +21,6 @@ struct ContentView: View {
     
     var body: some View {
         TabView {
-            TimerView()
-                .tabItem {
-                    Image(systemName: "timer.circle.fill")
-                    Text((currentLanguage == "English") ?
-                         "Timer" : "Таймер")
-                    
-                }
-            
             SequenceView()
                 .tabItem {
                     Image(systemName: "list.bullet.clipboard")

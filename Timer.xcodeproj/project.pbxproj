@@ -12,7 +12,6 @@
 		BE75D2872921A696000A06D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE75D2862921A696000A06D4 /* Assets.xcassets */; };
 		BE75D28A2921A696000A06D4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE75D2892921A696000A06D4 /* Preview Assets.xcassets */; };
 		BE75D2962921BF54000A06D4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE75D2952921BF54000A06D4 /* Constants.swift */; };
-		BE7888FF292257FB00ECF3B4 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7888FE292257FB00ECF3B4 /* TimerView.swift */; };
 		BE7889012922584000ECF3B4 /* NewTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7889002922584000ECF3B4 /* NewTimerView.swift */; };
 		BE7889032922595A00ECF3B4 /* SequenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7889022922595900ECF3B4 /* SequenceView.swift */; };
 		BE7889052922598E00ECF3B4 /* NewSequenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7889042922598E00ECF3B4 /* NewSequenceView.swift */; };
@@ -27,7 +26,6 @@
 		BE75D2862921A696000A06D4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BE75D2892921A696000A06D4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		BE75D2952921BF54000A06D4 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		BE7888FE292257FB00ECF3B4 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		BE7889002922584000ECF3B4 /* NewTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTimerView.swift; sourceTree = "<group>"; };
 		BE7889022922595900ECF3B4 /* SequenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceView.swift; sourceTree = "<group>"; };
 		BE7889042922598E00ECF3B4 /* NewSequenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSequenceView.swift; sourceTree = "<group>"; };
@@ -59,7 +57,6 @@
 		BE33F02E292251DC009F827F /* Timer */ = {
 			isa = PBXGroup;
 			children = (
-				BE7888FE292257FB00ECF3B4 /* TimerView.swift */,
 				BE7889002922584000ECF3B4 /* NewTimerView.swift */,
 			);
 			path = Timer;
@@ -199,7 +196,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE7889032922595A00ECF3B4 /* SequenceView.swift in Sources */,
-				BE7888FF292257FB00ECF3B4 /* TimerView.swift in Sources */,
 				BE7889012922584000ECF3B4 /* NewTimerView.swift in Sources */,
 				BE78890829225A1000ECF3B4 /* SettingsView.swift in Sources */,
 				BE75D2852921A694000A06D4 /* ContentView.swift in Sources */,
