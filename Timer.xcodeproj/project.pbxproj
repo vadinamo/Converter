@@ -7,23 +7,31 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BE33F02D29225116009F827F /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE33F02C29225116009F827F /* TimerView.swift */; };
 		BE75D2832921A694000A06D4 /* TimerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE75D2822921A694000A06D4 /* TimerApp.swift */; };
 		BE75D2852921A694000A06D4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE75D2842921A694000A06D4 /* ContentView.swift */; };
 		BE75D2872921A696000A06D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE75D2862921A696000A06D4 /* Assets.xcassets */; };
 		BE75D28A2921A696000A06D4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE75D2892921A696000A06D4 /* Preview Assets.xcassets */; };
 		BE75D2962921BF54000A06D4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE75D2952921BF54000A06D4 /* Constants.swift */; };
+		BE7888FF292257FB00ECF3B4 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7888FE292257FB00ECF3B4 /* TimerView.swift */; };
+		BE7889012922584000ECF3B4 /* NewTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7889002922584000ECF3B4 /* NewTimerView.swift */; };
+		BE7889032922595A00ECF3B4 /* SequenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7889022922595900ECF3B4 /* SequenceView.swift */; };
+		BE7889052922598E00ECF3B4 /* NewSequenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7889042922598E00ECF3B4 /* NewSequenceView.swift */; };
+		BE78890829225A1000ECF3B4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE78890729225A1000ECF3B4 /* SettingsView.swift */; };
 		BEB99E8D2921CC8100F2CDC2 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB99E8C2921CC8100F2CDC2 /* Color.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		BE33F02C29225116009F827F /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		BE75D27F2921A694000A06D4 /* Timer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Timer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE75D2822921A694000A06D4 /* TimerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerApp.swift; sourceTree = "<group>"; };
 		BE75D2842921A694000A06D4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		BE75D2862921A696000A06D4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BE75D2892921A696000A06D4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		BE75D2952921BF54000A06D4 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		BE7888FE292257FB00ECF3B4 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
+		BE7889002922584000ECF3B4 /* NewTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTimerView.swift; sourceTree = "<group>"; };
+		BE7889022922595900ECF3B4 /* SequenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceView.swift; sourceTree = "<group>"; };
+		BE7889042922598E00ECF3B4 /* NewSequenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSequenceView.swift; sourceTree = "<group>"; };
+		BE78890729225A1000ECF3B4 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		BEB99E8C2921CC8100F2CDC2 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -41,9 +49,29 @@
 		BE33F02B292250D7009F827F /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				BE33F02C29225116009F827F /* TimerView.swift */,
+				BE78890629225A0400ECF3B4 /* Settings */,
+				BE33F02F292251EC009F827F /* Sequence */,
+				BE33F02E292251DC009F827F /* Timer */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		BE33F02E292251DC009F827F /* Timer */ = {
+			isa = PBXGroup;
+			children = (
+				BE7888FE292257FB00ECF3B4 /* TimerView.swift */,
+				BE7889002922584000ECF3B4 /* NewTimerView.swift */,
+			);
+			path = Timer;
+			sourceTree = "<group>";
+		};
+		BE33F02F292251EC009F827F /* Sequence */ = {
+			isa = PBXGroup;
+			children = (
+				BE7889022922595900ECF3B4 /* SequenceView.swift */,
+				BE7889042922598E00ECF3B4 /* NewSequenceView.swift */,
+			);
+			path = Sequence;
 			sourceTree = "<group>";
 		};
 		BE75D2762921A694000A06D4 = {
@@ -82,6 +110,14 @@
 				BE75D2892921A696000A06D4 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		BE78890629225A0400ECF3B4 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				BE78890729225A1000ECF3B4 /* SettingsView.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		BEB99E8B2921CC7400F2CDC2 /* Extensions */ = {
@@ -162,10 +198,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE33F02D29225116009F827F /* TimerView.swift in Sources */,
+				BE7889032922595A00ECF3B4 /* SequenceView.swift in Sources */,
+				BE7888FF292257FB00ECF3B4 /* TimerView.swift in Sources */,
+				BE7889012922584000ECF3B4 /* NewTimerView.swift in Sources */,
+				BE78890829225A1000ECF3B4 /* SettingsView.swift in Sources */,
 				BE75D2852921A694000A06D4 /* ContentView.swift in Sources */,
 				BEB99E8D2921CC8100F2CDC2 /* Color.swift in Sources */,
 				BE75D2832921A694000A06D4 /* TimerApp.swift in Sources */,
+				BE7889052922598E00ECF3B4 /* NewSequenceView.swift in Sources */,
 				BE75D2962921BF54000A06D4 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

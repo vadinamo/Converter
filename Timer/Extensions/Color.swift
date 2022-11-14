@@ -11,9 +11,11 @@ extension Color {
     static var theme: Color  {
         return Color("theme")
     }
+    
     static var BackgroundColor: Color  {
         return Color("BackgroundColor")
     }
+    
     static var Accent: Color  {
         return Color("SecondaryColor")
     }
