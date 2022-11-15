@@ -13,6 +13,9 @@ struct SequenceItemView: View {
     @AppStorage("darkMode") private var darkMode = false
     
     @ObservedObject var vm: ViewModel
+    @State var time = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State var to: CGFloat = 0
+    
     let sequenceId: UUID
     
     var body: some View {
@@ -28,48 +31,61 @@ struct SequenceItemView: View {
             
             Text(vm.sequence(id: sequenceId).name).bold()
             
-            ZStack {
+            if vm.sequence(id: sequenceId).timers.count > 0 {
                 ZStack {
-                    Circle()
-                        .trim(from: 0, to: 1)
-                        .stroke(TextColor(color: darkMode ? Color.black : Color.white).opacity(0.09), style: StrokeStyle(lineWidth: 35, lineCap: .round))
-                        .frame(width: 280, height: 280)
-                    Circle()
-                        .trim(from: 0, to: 0.5)
-                        .stroke(vm.sequence(id: sequenceId).color, style: StrokeStyle(lineWidth: 35, lineCap: .round))
-                        .frame(width: 280, height: 280)
-                }
-                .rotationEffect(.init(degrees: -90))
-                
-                VStack {
-                    Text("15")
-                        .font(.system(size: 65))
-                        .bold()
-                    Text("\((currentLanguage == "English") ? " of " : " из ")\(15)")
-                }
-            }
-            .padding()
-            
-            HStack {
-                Button(action: {}, label: {
                     ZStack {
-                        Circle().frame(width: CGFloat((fontSizes[currentFontSize] ?? 0) * 2), height: CGFloat((fontSizes[currentFontSize] ?? 0) * 2))
-                            .foregroundColor(vm.sequence(id: sequenceId).color)
-                        Image(systemName: vm.sequence(id: sequenceId).isActive ? "pause.fill" : "play.fill")
-                            .foregroundColor(TextColor(color: vm.sequence(id: sequenceId).color))
+                        Circle()
+                            .trim(from: 0, to: 1)
+                            .stroke(TextColor(color: darkMode ? Color.black : Color.white).opacity(0.09), style: StrokeStyle(lineWidth: 35, lineCap: .round))
+                            .frame(width: 280, height: 280)
+                        Circle()
+                            .trim(from: 0, to: to)
+                            .stroke(vm.sequence(id: sequenceId).color, style: StrokeStyle(lineWidth: 35, lineCap: .round))
+                            .frame(width: 280, height: 280)
                     }
-                })
+                    .rotationEffect(.init(degrees: -90))
+                    
+                    VStack {
+                        Text("\(vm.sequence(id: sequenceId).counter)")
+                            .font(.system(size: 65))
+                            .bold()
+                        Text("\((currentLanguage == "English") ? " of " : " из ")\(15)")
+                    }
+                }
+                .padding()
                 
-                Button(action: {}, label: {
-                    ZStack {
-                        Circle().frame(width: CGFloat((fontSizes[currentFontSize] ?? 0) * 2), height: CGFloat((fontSizes[currentFontSize] ?? 0) * 2))
-                            .foregroundColor(vm.sequence(id: sequenceId).color)
-                        Image(systemName: "arrow.clockwise")
-                            .foregroundColor(TextColor(color: vm.sequence(id: sequenceId).color))
-                    }
-                })
+                HStack {
+                    Button(action: {
+                        vm.toggle(id: sequenceId)
+                    }, label: {
+                        ZStack {
+                            Circle().frame(width: CGFloat((fontSizes[currentFontSize] ?? 0) * 2), height: CGFloat((fontSizes[currentFontSize] ?? 0) * 2))
+                                .foregroundColor(vm.sequence(id: sequenceId).color)
+                            Image(systemName: vm.sequence(id: sequenceId).isActive ? "pause.fill" : "play.fill")
+                                .foregroundColor(TextColor(color: vm.sequence(id: sequenceId).color))
+                        }
+                    })
+                    
+                    Button(action: {
+                        vm.reset(id: sequenceId)
+                        withAnimation(.default) {
+                            self.to = 0
+                        }
+                    }, label: {
+                        ZStack {
+                            Circle().frame(width: CGFloat((fontSizes[currentFontSize] ?? 0) * 2), height: CGFloat((fontSizes[currentFontSize] ?? 0) * 2))
+                                .foregroundColor(vm.sequence(id: sequenceId).color)
+                            Image(systemName: "arrow.clockwise")
+                                .foregroundColor(TextColor(color: vm.sequence(id: sequenceId).color))
+                        }
+                    })
+                }
+                .padding()
             }
-            .padding()
+            else {
+                Spacer()
+                Text("\((currentLanguage == "English") ? "There is no timers in \(vm.sequence(id: sequenceId).name) add some to start" : "Еще нет таймеров в последовательности '\(vm.sequence(id: sequenceId).name)' добавьте несколько для начала")").padding()
+            }
             
             List {
                 ForEach(0..<vm.sequence(id: sequenceId).timers.count, id: \.self) { i in
@@ -86,5 +102,13 @@ struct SequenceItemView: View {
             }
         }
         .padding()
+        .onReceive(self.time, perform: { (_) in
+            if vm.sequence(id: sequenceId).isActive {
+                withAnimation(.default) {
+                    self.to = CGFloat(vm.sequence(id: sequenceId).counter) / CGFloat(vm.sequence(id: sequenceId).timers[vm.sequence(id: sequenceId).currentTimer].duration)
+                }
+                vm.tick(id: sequenceId)
+            }
+        })
     }
 }

@@ -12,16 +12,20 @@ struct Sequence: Hashable {
     var id: UUID = UUID()
     var name: String
     var color: Color
-    var currentTimer: Int
     var timers: [TimerAction]
+    
+    var currentTimer: Int
     var isActive: Bool
+    var counter: Int
     
     init(name: String, color: Color, timers: [TimerAction]) {
         self.name = name
         self.color = color
         self.timers = timers
+        
         self.currentTimer = 0
-        self.isActive = true
+        self.isActive = false
+        self.counter = 0
     }
     
     func totalTime() -> String {
