@@ -30,7 +30,12 @@ struct SequenceView: View {
                 .font(.system(size: CGFloat(fontSizes[currentFontSize] ?? 0)))
                 
                 Text((currentLanguage == "English") ?
-                     "Sequences" : "Последовательности")
+                     "Sequences" : "Последовательности").fontWeight(.bold)
+                ScrollView {
+                    VStack {
+                        Text("sqqoiwew")
+                    }
+                }
                 
                 Spacer()
                 Divider()

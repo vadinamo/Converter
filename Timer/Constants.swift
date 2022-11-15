@@ -25,9 +25,14 @@ class UserDefaultsUtils {
 }
 
 var languages = [ "English", "Русский"]
+
 var fonts = ["Small", "Medium", "Large"]
+var fontsLocale = ["Small" : "Маленький", "Medium" : "Нормальный", "Large" : "Здоровый"]
+
+var typesLocale = ["Preparation" : "Подготовка", "Training" : "Тренировка", "Resting" : "Отдых"]
+
 var fontSizes = [
-    "Small": 20,
+    "Small": 18,
     "Medium": 28,
     "Large": 36
 ]

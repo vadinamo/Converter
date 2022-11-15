@@ -37,7 +37,8 @@ struct SettingsView: View {
                 Spacer()
                 Picker("Font size", selection: $currentFontSize.animation()) {
                     ForEach(fonts, id: \.self) {
-                        Text($0)
+                        Text(((currentLanguage == "English") ?
+                              $0 : fontsLocale[$0]) ?? "")
                     }
                 }
             }
