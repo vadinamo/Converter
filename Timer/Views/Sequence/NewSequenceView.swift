@@ -54,30 +54,40 @@ struct NewSequenceView: View {
                 }
             }
             
-            ScrollView {
+            List {
                 ForEach(0..<timerActions.count, id: \.self) { i in
                     VStack {
-                        Divider()
-                        Text(((currentLanguage == "English") ? timerActions[i].type : typesLocale[timerActions[i].type]) ?? "")
+                        HStack {
+                            Image(systemName: actionImages[timerActions[i].type] ?? "")
+                            Text(((currentLanguage == "English") ? timerActions[i].type : typesLocale[timerActions[i].type]) ?? "")
+                        }
+                        
                         HStack {
                             Button(action: { if timerActions[i].duration > 0 {
                                 timerActions[i].duration -= 1
-                            }
-                                
-                            },
+                            }},
                                    label: {
-                                Image(systemName: "minus.circle.fill")
+                                Image(systemName: "minus.circle.fill").foregroundColor(Color.Accent)
                             })
+                            .buttonStyle(PlainButtonStyle())
+                            
                             Spacer()
+                            
                             Text(String(timerActions[i].duration))
                             Spacer()
                             Button(action: { timerActions[i].duration += 1 },
                                    label: {
-                                Image(systemName: "plus.circle.fill")
+                                Image(systemName: "plus.circle.fill").foregroundColor(Color.Accent)
                             })
+                            .buttonStyle(PlainButtonStyle())
                         }
-                        Divider()
                     }
+                }
+                .onDelete { indexSet in
+                    timerActions.remove(atOffsets: indexSet)
+                }
+                .onMove { indexSet, index in
+                    timerActions.move(fromOffsets: indexSet, toOffset: index)
                 }
             }
             
