@@ -14,12 +14,14 @@ struct Sequence: Hashable {
     var color: Color
     var currentTimer: Int
     var timers: [TimerAction]
+    var isActive: Bool
     
     init(name: String, color: Color, timers: [TimerAction]) {
         self.name = name
         self.color = color
         self.timers = timers
         self.currentTimer = 0
+        self.isActive = true
     }
     
     func totalTime() -> String {

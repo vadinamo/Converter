@@ -17,17 +17,13 @@ struct SequenceView: View {
         NavigationView {
             VStack {
                 HStack {
+                    Spacer()
+                    
                     NavigationLink {
                         NewSequenceView(vm: vm)
                     } label: {
                         Image(systemName: "plus.circle.fill")
                     }
-                    
-                    Spacer()
-                    
-                    Button(action: {}, label: {
-                        Image(systemName: "square.and.pencil.circle.fill")
-                    })
                 }
                 .font(.system(size: CGFloat(fontSizes[currentFontSize] ?? 0)))
                 
@@ -36,7 +32,7 @@ struct SequenceView: View {
                 
                 List {
                     ForEach(0..<vm.sequences.count, id: \.self) { i in
-                        NavigationLink{ EditSequenceView(sequence: vm.sequences[i], vm: vm) } label: {
+                        NavigationLink{ SequenceItemView(vm: vm, sequenceId: vm.sequences[i].id) } label: {
                             HStack{
                                 Text(vm.sequences[i].name).bold()
                                 

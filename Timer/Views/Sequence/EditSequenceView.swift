@@ -12,8 +12,8 @@ struct EditSequenceView: View {
     
     @AppStorage("currentLanguage") private var currentLanguage = "English"
     
-    @State var sequence: Sequence
     @ObservedObject var vm: ViewModel
+    @State var sequence: Sequence
     
     var body: some View {
         VStack {

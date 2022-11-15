@@ -19,4 +19,12 @@ class ViewModel: ObservableObject {
             sequences[i] = sequence
         }
     }
+    
+    func sequence(id: UUID) -> Sequence {
+        if let i = sequences.firstIndex(where: {$0.id == id}) {
+            return sequences[i]
+        }
+        
+        return Sequence(name: "", color: Color.Accent, timers: [])
+    }
 }
