@@ -18,6 +18,8 @@
 		BE7889032922595A00ECF3B4 /* SequenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7889022922595900ECF3B4 /* SequenceView.swift */; };
 		BE7889052922598E00ECF3B4 /* NewSequenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7889042922598E00ECF3B4 /* NewSequenceView.swift */; };
 		BE78890829225A1000ECF3B4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE78890729225A1000ECF3B4 /* SettingsView.swift */; };
+		BEA693B32924156B00927CC7 /* SequenceItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA693B22924156B00927CC7 /* SequenceItemView.swift */; };
+		BEA693B52924195300927CC7 /* EditSequenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA693B42924195300927CC7 /* EditSequenceView.swift */; };
 		BEB99E8D2921CC8100F2CDC2 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB99E8C2921CC8100F2CDC2 /* Color.swift */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +36,8 @@
 		BE7889022922595900ECF3B4 /* SequenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceView.swift; sourceTree = "<group>"; };
 		BE7889042922598E00ECF3B4 /* NewSequenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSequenceView.swift; sourceTree = "<group>"; };
 		BE78890729225A1000ECF3B4 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		BEA693B22924156B00927CC7 /* SequenceItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceItemView.swift; sourceTree = "<group>"; };
+		BEA693B42924195300927CC7 /* EditSequenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSequenceView.swift; sourceTree = "<group>"; };
 		BEB99E8C2921CC8100F2CDC2 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -72,6 +76,8 @@
 			children = (
 				BE7889022922595900ECF3B4 /* SequenceView.swift */,
 				BE7889042922598E00ECF3B4 /* NewSequenceView.swift */,
+				BEA693B22924156B00927CC7 /* SequenceItemView.swift */,
+				BEA693B42924195300927CC7 /* EditSequenceView.swift */,
 			);
 			path = Sequence;
 			sourceTree = "<group>";
@@ -202,7 +208,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE7889032922595A00ECF3B4 /* SequenceView.swift in Sources */,
+				BEA693B32924156B00927CC7 /* SequenceItemView.swift in Sources */,
 				BE78890829225A1000ECF3B4 /* SettingsView.swift in Sources */,
+				BEA693B52924195300927CC7 /* EditSequenceView.swift in Sources */,
 				BE27677F2923000300134660 /* ViewModel.swift in Sources */,
 				BE75D2852921A694000A06D4 /* ContentView.swift in Sources */,
 				BEB99E8D2921CC8100F2CDC2 /* Color.swift in Sources */,

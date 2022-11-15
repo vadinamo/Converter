@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TimerAction: Identifiable {
+struct TimerAction: Hashable {
     var id: UUID = UUID()
     var duration: Int = 0
     var type: String = ""

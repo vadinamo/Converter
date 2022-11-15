@@ -1,33 +1,31 @@
 //
-//  NewSequenceView.swift
+//  EditSequenceView.swift
 //  Timer
 //
-//  Created by Вадим Юрьев on 14.11.22.
+//  Created by Вадим Юрьев on 15.11.22.
 //
 
 import SwiftUI
 
-struct NewSequenceView: View {
+struct EditSequenceView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     @AppStorage("currentLanguage") private var currentLanguage = "English"
-    @State private var sequenceTitle: String = ""
-    @State private var sequenceColor: Color = Color.Accent
-    @State private var timerActions: [TimerAction] = []
     
+    @State var sequence: Sequence
     @ObservedObject var vm: ViewModel
     
     var body: some View {
         VStack {
             TextField(
                 (currentLanguage == "English") ? "Title" : "Название",
-                text: $sequenceTitle
+                text: $sequence.name
             )
             
             Divider().padding()
             
             ColorPicker((currentLanguage == "English") ? "Background color" : "Цвет фона",
-                        selection: $sequenceColor, supportsOpacity: false)
+                        selection: $sequence.color, supportsOpacity: false)
             
             Divider().padding()
             
@@ -36,21 +34,21 @@ struct NewSequenceView: View {
             
             HStack {
                 VStack {
-                    Button(action: { timerActions.append(TimerAction(duration: 10, type: "Preparation")) },
+                    Button(action: { sequence.timers.append(TimerAction(duration: 10, type: "Preparation")) },
                            label: { GetButtonLabel(systemImage: "figure.walk")
                     })
                     Text((currentLanguage == "English") ?
                          "Preparation" : "Подготовка")
                 }
                 VStack {
-                    Button(action: { timerActions.append(TimerAction(duration: 10, type: "Training")) },
+                    Button(action: { sequence.timers.append(TimerAction(duration: 10, type: "Training")) },
                            label: { GetButtonLabel(systemImage: "figure.strengthtraining.traditional")
                     })
                     Text((currentLanguage == "English") ?
                          "Training" : "Тренировка")
                 }
                 VStack {
-                    Button(action: { timerActions.append(TimerAction(duration: 10, type: "Resting")) },
+                    Button(action: { sequence.timers.append(TimerAction(duration: 10, type: "Resting")) },
                            label: { GetButtonLabel(systemImage: "figure.stand")
                     })
                     Text((currentLanguage == "English") ?
@@ -59,16 +57,16 @@ struct NewSequenceView: View {
             }
             
             List {
-                ForEach(0..<timerActions.count, id: \.self) { i in
+                ForEach(0..<sequence.timers.count, id: \.self) { i in
                     VStack {
                         HStack {
-                            Image(systemName: actionImages[timerActions[i].type] ?? "")
-                            Text(((currentLanguage == "English") ? timerActions[i].type : typesLocale[timerActions[i].type]) ?? "")
+                            Image(systemName: actionImages[sequence.timers[i].type] ?? "")
+                            Text(((currentLanguage == "English") ? sequence.timers[i].type : typesLocale[sequence.timers[i].type]) ?? "")
                         }
                         
                         HStack {
-                            Button(action: { if timerActions[i].duration > 0 {
-                                timerActions[i].duration -= 1
+                            Button(action: { if sequence.timers[i].duration > 0 {
+                                sequence.timers[i].duration -= 1
                             }},
                                    label: {
                                 Image(systemName: "minus.circle.fill")
@@ -77,39 +75,39 @@ struct NewSequenceView: View {
                             
                             Spacer()
                             
-                            Text(String(timerActions[i].duration))
+                            Text(String(sequence.timers[i].duration))
                             Spacer()
-                            Button(action: { timerActions[i].duration += 1 },
+                            Button(action: { sequence.timers[i].duration += 1 },
                                    label: {
                                 Image(systemName: "plus.circle.fill")
                             })
                             .buttonStyle(PlainButtonStyle())
                         }
                     }
-                    .foregroundColor(TextColor(color: sequenceColor))
-                    .listRowBackground(sequenceColor)
+                    .foregroundColor(TextColor(color: sequence.color))
+                    .listRowBackground(sequence.color)
                 }
                 .onDelete { indexSet in
-                    timerActions.remove(atOffsets: indexSet)
+                    sequence.timers.remove(atOffsets: indexSet)
                 }
                 .onMove { indexSet, index in
-                    timerActions.move(fromOffsets: indexSet, toOffset: index)
+                    sequence.timers.move(fromOffsets: indexSet, toOffset: index)
                 }
             }
             
             Spacer()
             
             Button(action: {
-                if sequenceTitle == "" {
-                    sequenceTitle = (currentLanguage == "English") ? "Timer" : "Таймер"
+                if sequence.name == "" {
+                    sequence.name = (currentLanguage == "English") ? "Timer" : "Таймер"
                 }
-                vm.sequences.append(Sequence(name: sequenceTitle,
-                                             color: sequenceColor,
-                                             timers: timerActions))
+                
+                vm.EditSequence(sequence: sequence)
+                
                 self.presentationMode.wrappedValue.dismiss()
             },
                    label: {
-                Text((currentLanguage == "English") ? "Create" : "Создать")
+                Text((currentLanguage == "English") ? "Save" : "Сохранить")
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .padding()
                     .foregroundColor(Color.Accent)
@@ -133,3 +131,4 @@ struct NewSequenceView: View {
             )
     }
 }
+

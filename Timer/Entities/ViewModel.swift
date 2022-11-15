@@ -7,6 +7,16 @@
 
 import SwiftUI
 
-class ViewModel {
-    @Published var sequences: [Sequence] = []
+class ViewModel: ObservableObject {
+    @Published var sequences: [Sequence]
+    
+    init() {
+        self.sequences = []
+    }
+    
+    func EditSequence(sequence: Sequence) {
+        if let i = sequences.firstIndex(where: {$0.id == sequence.id}) {
+            sequences[i] = sequence
+        }
+    }
 }

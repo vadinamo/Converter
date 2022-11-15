@@ -19,9 +19,11 @@ struct ContentView: View {
     @AppStorage("currentLanguage") private var currentLanguage = "English"
     @AppStorage("currentFontSize") private var currentFontSize = "Small"
     
+    @ObservedObject var vm: ViewModel
+    
     var body: some View {
         TabView {
-            SequenceView()
+            SequenceView(vm: vm)
                 .tabItem {
                     Image(systemName: "list.bullet.clipboard")
                     Text((currentLanguage == "English") ?
@@ -39,12 +41,5 @@ struct ContentView: View {
         .font(.system(size: CGFloat(fontSizes[currentFontSize] ?? 0)))
         .background()
         .preferredColorScheme(darkMode ? .dark : .light)
-    }
-}
-
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }

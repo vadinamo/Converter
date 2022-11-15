@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 var languages = [ "English", "Русский"]
 
@@ -49,4 +50,23 @@ class UserDefaultsUtils {
         let defaults = UserDefaults.standard
         return defaults.bool(forKey: Constants.DARK_MODE)
     }
+}
+
+func TextColor(color: Color) -> Color {
+    if let components = color.cgColor?.components {
+        let firstComponent = (components[0] * 299)
+        let secondComponent = (components[1] * 587)
+        let ThirdComponent = (components[2] * 114)
+        let brightness = (firstComponent + secondComponent + ThirdComponent) / 1000
+        
+        if brightness < 0.5
+        {
+            return .white
+        }
+        else
+        {
+            return .black
+        }
+    }
+    return .black
 }
