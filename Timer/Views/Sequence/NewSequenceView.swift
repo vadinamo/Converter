@@ -13,108 +13,129 @@ struct NewSequenceView: View {
     @State private var sequenceColor: Color = Color.Accent
     @State private var timerActions: [TimerAction] = []
     
-    var body: some View {
-        VStack {
-            TextField(
-                (currentLanguage == "English") ? "Title" : "Название",
-                text: $sequenceTitle
-            )
+    private var textColor: Color {
+        if let components = sequenceColor.cgColor?.components {
+            let firstComponent = (components[0] * 299)
+            let secondComponent = (components[1] * 587)
+            let ThirdComponent = (components[2] * 114)
+            let brightness = (firstComponent + secondComponent + ThirdComponent) / 1000
             
-            Divider().padding()
-            
-            ColorPicker((currentLanguage == "English") ? "Background color" : "Цвет фона",
-                        selection: $sequenceColor, supportsOpacity: false)
-            
-            Divider().padding()
-            
-            Text((currentLanguage == "English") ?
-                 "Timers" : "Таймеры").fontWeight(.bold)
-            
-            HStack {
-                VStack {
-                    Button(action: { timerActions.append(TimerAction(duration: 10, type: "Preparation")) },
-                           label: { GetButtonLabel(systemImage: "figure.walk")
-                    })
-                    Text((currentLanguage == "English") ?
-                         "Preparation" : "Подготовка")
-                }
-                VStack {
-                    Button(action: { timerActions.append(TimerAction(duration: 10, type: "Training")) },
-                           label: { GetButtonLabel(systemImage: "figure.strengthtraining.traditional")
-                    })
-                    Text((currentLanguage == "English") ?
-                         "Training" : "Тренировка")
-                }
-                VStack {
-                    Button(action: { timerActions.append(TimerAction(duration: 10, type: "Resting")) },
-                           label: { GetButtonLabel(systemImage: "figure.stand")
-                    })
-                    Text((currentLanguage == "English") ?
-                         "Resting" : "Отдых")
-                }
+            if brightness < 0.5
+            {
+                return .white
             }
-            
-            List {
-                ForEach(0..<timerActions.count, id: \.self) { i in
-                    VStack {
-                        HStack {
-                            Image(systemName: actionImages[timerActions[i].type] ?? "")
-                            Text(((currentLanguage == "English") ? timerActions[i].type : typesLocale[timerActions[i].type]) ?? "")
-                        }
+            else
+            {
+                return .black
+            }
+        }
+        return .black
+    }
+
+var body: some View {
+    VStack {
+        TextField(
+            (currentLanguage == "English") ? "Title" : "Название",
+            text: $sequenceTitle
+        )
+        
+        Divider().padding()
+        
+        ColorPicker((currentLanguage == "English") ? "Background color" : "Цвет фона",
+                    selection: $sequenceColor, supportsOpacity: false)
+        
+        Divider().padding()
+        
+        Text((currentLanguage == "English") ?
+             "Timers" : "Таймеры").fontWeight(.bold)
+        
+        HStack {
+            VStack {
+                Button(action: { timerActions.append(TimerAction(duration: 10, type: "Preparation")) },
+                       label: { GetButtonLabel(systemImage: "figure.walk")
+                })
+                Text((currentLanguage == "English") ?
+                     "Preparation" : "Подготовка")
+            }
+            VStack {
+                Button(action: { timerActions.append(TimerAction(duration: 10, type: "Training")) },
+                       label: { GetButtonLabel(systemImage: "figure.strengthtraining.traditional")
+                })
+                Text((currentLanguage == "English") ?
+                     "Training" : "Тренировка")
+            }
+            VStack {
+                Button(action: { timerActions.append(TimerAction(duration: 10, type: "Resting")) },
+                       label: { GetButtonLabel(systemImage: "figure.stand")
+                })
+                Text((currentLanguage == "English") ?
+                     "Resting" : "Отдых")
+            }
+        }
+        
+        List {
+            ForEach(0..<timerActions.count, id: \.self) { i in
+                VStack {
+                    HStack {
+                        Image(systemName: actionImages[timerActions[i].type] ?? "")
+                        Text(((currentLanguage == "English") ? timerActions[i].type : typesLocale[timerActions[i].type]) ?? "")
+                    }
+                    
+                    HStack {
+                        Button(action: { if timerActions[i].duration > 0 {
+                            timerActions[i].duration -= 1
+                        }},
+                               label: {
+                            Image(systemName: "minus.circle.fill")
+                        })
+                        .buttonStyle(PlainButtonStyle())
                         
-                        HStack {
-                            Button(action: { if timerActions[i].duration > 0 {
-                                timerActions[i].duration -= 1
-                            }},
-                                   label: {
-                                Image(systemName: "minus.circle.fill").foregroundColor(Color.Accent)
-                            })
-                            .buttonStyle(PlainButtonStyle())
-                            
-                            Spacer()
-                            
-                            Text(String(timerActions[i].duration))
-                            Spacer()
-                            Button(action: { timerActions[i].duration += 1 },
-                                   label: {
-                                Image(systemName: "plus.circle.fill").foregroundColor(Color.Accent)
-                            })
-                            .buttonStyle(PlainButtonStyle())
-                        }
+                        Spacer()
+                        
+                        Text(String(timerActions[i].duration))
+                        Spacer()
+                        Button(action: { timerActions[i].duration += 1 },
+                               label: {
+                            Image(systemName: "plus.circle.fill")
+                        })
+                        .buttonStyle(PlainButtonStyle())
                     }
                 }
-                .onDelete { indexSet in
-                    timerActions.remove(atOffsets: indexSet)
-                }
-                .onMove { indexSet, index in
-                    timerActions.move(fromOffsets: indexSet, toOffset: index)
-                }
+                .foregroundColor(textColor)
+                .listRowBackground(sequenceColor)
             }
-            
-            Spacer()
-            
-            Button(action: {}, label: {
-                Text((currentLanguage == "English") ? "Create" : "Создать")
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    .padding()
-                    .foregroundColor(Color.Accent)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 25)
-                            .stroke(Color.Accent, lineWidth: 2)
-                    )
-            })
+            .onDelete { indexSet in
+                timerActions.remove(atOffsets: indexSet)
+            }
+            .onMove { indexSet, index in
+                timerActions.move(fromOffsets: indexSet, toOffset: index)
+            }
         }
+        
+        Spacer()
+        
+        Button(action: {}, label: {
+            Text((currentLanguage == "English") ? "Create" : "Создать")
+                .frame(minWidth: 0, maxWidth: .infinity)
+                .padding()
+                .foregroundColor(Color.Accent)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 25)
+                        .stroke(Color.Accent, lineWidth: 2)
+                )
+        })
+    }
+    .padding()
+}
+
+func GetButtonLabel(systemImage: String) -> some View {
+    return Image(systemName: systemImage)
+        .frame(minWidth: 0, maxWidth: .infinity)
         .padding()
-    }
-    
-    func GetButtonLabel(systemImage: String) -> some View {
-        return Image(systemName: systemImage)
-            .frame(minWidth: 0, maxWidth: .infinity)
-            .padding()
-            .foregroundColor(Color.Accent)
-            .overlay(
-                RoundedRectangle(cornerRadius: 25)
-                    .stroke(Color.Accent, lineWidth: 2)
-            )
-    }
+        .foregroundColor(Color.Accent)
+        .overlay(
+            RoundedRectangle(cornerRadius: 25)
+                .stroke(Color.Accent, lineWidth: 2)
+        )
+}
 }
