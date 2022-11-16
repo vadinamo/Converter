@@ -8,10 +8,15 @@
 import SwiftUI
 
 class ViewModel: ObservableObject {
-    @Published var sequences: [Sequence]
+    @Published public var sequences: [Sequence]
     
     init() {
-        self.sequences = []
+        self.sequences = ApplicationDB().GetSequences()
+    }
+    
+    func AddSequence(sequence: Sequence) {
+        ApplicationDB().AddSequence(sequence: sequence)
+        self.sequences = ApplicationDB().GetSequences()
     }
     
     func EditSequence(sequence: Sequence) {
@@ -19,6 +24,11 @@ class ViewModel: ObservableObject {
             sequences[i] = sequence
             reset(id: sequence.id)
         }
+    }
+    
+    func RemoveSequence(sequence: Sequence) {
+        ApplicationDB().SequenceDelete(sequenceId: sequence.id)
+        self.sequences = ApplicationDB().GetSequences()
     }
     
     func sequence(id: UUID) -> Sequence {

@@ -39,14 +39,21 @@ struct SequenceView: View {
                                 Spacer()
                                 
                                 Text(vm.sequences[i].totalTime())
+                                
+                                Spacer()
+                                
+                                Button(action: {
+                                    vm.RemoveSequence(sequence: vm.sequences[i])
+                                }, label: {
+                                    Image(systemName: "trash.fill")
+                                    
+                                })
+                                .buttonStyle(PlainButtonStyle())
                             }
                         }
                         .foregroundColor(TextColor(color: vm.sequences[i].color))
                         .listRowBackground(vm.sequences[i].color)
                         .padding()
-                    }
-                    .onDelete { indexSet in
-                        vm.sequences.remove(atOffsets: indexSet)
                     }
                     .onMove { indexSet, index in
                         vm.sequences.move(fromOffsets: indexSet, toOffset: index)

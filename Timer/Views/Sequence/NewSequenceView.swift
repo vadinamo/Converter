@@ -103,7 +103,7 @@ struct NewSequenceView: View {
                 if sequenceTitle == "" {
                     sequenceTitle = (currentLanguage == "English") ? "Timer" : "Таймер"
                 }
-                vm.sequences.append(Sequence(name: sequenceTitle,
+                vm.AddSequence(sequence: Sequence(name: sequenceTitle,
                                              color: sequenceColor,
                                              timers: timerActions))
                 self.presentationMode.wrappedValue.dismiss()
