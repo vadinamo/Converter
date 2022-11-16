@@ -10,7 +10,7 @@ import AVFoundation
 
 struct SequenceItemView: View {
     @Environment(\.scenePhase) var scenePhase
-    @AppStorage("startBackground") private var startBackground: Int = Int(Date().timeIntervalSince1970)
+    @State var startBackground: Date!
     @State var endBackground: Date!
     
     @AppStorage("currentFontSize") private var currentFontSize = "Small"
@@ -127,15 +127,14 @@ struct SequenceItemView: View {
                     }
                 }
             }
-            print(vm.sequence(id: sequenceId).counter)
         })
         .onChange(of: scenePhase) { phase in
             if phase == .background {
-                startBackground = Int(Date().timeIntervalSince1970)
+                startBackground = Date()
             }
             else if phase == .active && vm.sequence(id: sequenceId).isActive {
                 endBackground = Date()
-                vm.AddBackground(id: sequenceId, timeSpent: ((Int(endBackground.timeIntervalSince1970)) - startBackground))
+                vm.AddBackground(id: sequenceId, timeSpent: Int(round(endBackground.timeIntervalSince(startBackground))))
             }
         }
     }

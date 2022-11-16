@@ -117,9 +117,8 @@ class ViewModel: ObservableObject {
             var counter = timeSpent
             
             for _ in sequences[i].currentTimer..<sequences[i].timers.count {
-                if counter > sequences[i].counter {
-                    counter -= sequences[i].timers[sequences[i].currentTimer].duration
-                    
+                if counter > (sequences[i].timers[sequences[i].currentTimer].duration - sequences[i].counter) {
+                    counter -= (sequences[i].timers[sequences[i].currentTimer].duration - sequences[i].counter)
                     
                     sequences[i].timers[sequences[i].currentTimer].isActive = false
                     sequences[i].currentTimer += 1
@@ -138,8 +137,8 @@ class ViewModel: ObservableObject {
                     ApplicationDB().SequenceUpdate(sequence: sequences[i])
                     self.sequences = ApplicationDB().GetSequences()
                 }
-                else if counter < sequences[i].timers[sequences[i].currentTimer].duration {
-                    sequences[i].counter -= counter
+                else {
+                    sequences[i].counter += counter
                     ApplicationDB().SequenceUpdate(sequence: sequences[i])
                     self.sequences = ApplicationDB().GetSequences()
                     return
