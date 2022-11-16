@@ -12,7 +12,7 @@ struct NewSequenceView: View {
     
     @AppStorage("currentLanguage") private var currentLanguage = "English"
     @State private var sequenceTitle: String = ""
-    @State private var sequenceColor: Color = Color.Accent
+    @State private var sequenceColor: Color = Color.gray
     @State private var timerActions: [TimerAction] = []
     
     @ObservedObject var vm: ViewModel

@@ -23,11 +23,13 @@ class ViewModel: ObservableObject {
         if let i = sequences.firstIndex(where: {$0.id == sequence.id}) {
             sequences[i] = sequence
             reset(id: sequence.id)
+            ApplicationDB().SequenceUpdate(sequence: sequences[i])
+            self.sequences = ApplicationDB().GetSequences()
         }
     }
     
     func RemoveSequence(sequence: Sequence) {
-        ApplicationDB().SequenceDelete(sequenceId: sequence.id)
+        ApplicationDB().SequenceDelete(sequence: sequence)
         self.sequences = ApplicationDB().GetSequences()
     }
     
@@ -58,6 +60,8 @@ class ViewModel: ObservableObject {
                     reset(id: id)
                 }
             }
+            ApplicationDB().SequenceUpdate(sequence: sequence(id: id))
+            self.sequences = ApplicationDB().GetSequences()
         }
     }
     

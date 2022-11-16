@@ -149,24 +149,56 @@ class ApplicationDB {
         return timersToGet
     }
     
-    public func SequenceDelete(sequenceId: UUID) {
-        do{
-            let sequenceToDelete = sequences.filter(sequence_id == sequenceId)
+    public func SequenceDelete(sequence: Sequence) {
+        do {
+            let sequenceToDelete = sequences.filter(sequence_id == sequence.id)
             try db.run(sequenceToDelete.delete())
             
-            for _ in try db.prepare(timers) {
-                var timerToDelete = timers.filter(timer_sequence_id == sequenceId)
-                try db.run(timerToDelete.delete())
+            for _ in 0..<sequence.timers.count {
+                TimerDelete(sequenceId: sequence.id)
             }
-        }catch{
+        } catch {
             print(error.localizedDescription)
             print(error)
             print(error.self)
         }
     }
     
-    public func SequenceUpdate(sequenceId: UUID) {
-        
+    public func TimerDelete(sequenceId: UUID) {
+        do {
+            let timerToDelete = timers.filter(timer_sequence_id == sequenceId)
+            try db.run(timerToDelete.delete())
+        } catch {
+            print(error.localizedDescription)
+            print(error)
+            print(error.self)
+        }
+    }
+    
+    public func SequenceUpdate(sequence: Sequence) {
+        do {
+            let sequenceToUpdate: SQLite.Table = sequences.filter(sequence_id == sequence.id)
+            try db.run(sequenceToUpdate.update(sequence_id <- sequence.id,
+                                               sequence_name <- sequence.name,
+                                               sequence_color <- colorToString(color: UIColor(sequence.color)),
+                                               sequence_current_timer <- sequence.currentTimer,
+                                               sequence_is_active <- sequence.isActive,
+                                               sequence_counter <- sequence.counter))
+            for _ in 0..<sequence.timers.count {
+                TimerDelete(sequenceId: sequence.id)
+            }
+            for timer in sequence.timers {
+                try db.run(timers.insert(timer_id <- timer.id,
+                                         timer_duration <- timer.duration,
+                                         timer_type <- timer.type,
+                                         timer_is_active <- timer.isActive,
+                                         timer_sequence_id <- sequence.id))
+            }
+        } catch {
+            print(error.localizedDescription)
+            print(error)
+            print(error.self)
+        }
     }
     
     func colorToString(color: UIColor) -> String {
