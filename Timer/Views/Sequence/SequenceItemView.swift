@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct SequenceItemView: View {
     @AppStorage("currentFontSize") private var currentFontSize = "Small"
@@ -111,6 +112,10 @@ struct SequenceItemView: View {
         .padding()
         .onReceive(self.time, perform: { (_) in
             if vm.sequence(id: sequenceId).isActive {
+                if vm.sequence(id: sequenceId).isActive && vm.sequence(id: sequenceId).timers[vm.sequence(id: sequenceId).currentTimer].duration - vm.sequence(id: sequenceId).counter <= 4 && vm.sequence(id: sequenceId).timers[vm.sequence(id: sequenceId).currentTimer].duration - vm.sequence(id: sequenceId).counter > 0 {
+                    let systemSoundID: SystemSoundID = 1052
+                    AudioServicesPlaySystemSound(systemSoundID)
+                }
                 vm.tick(id: sequenceId)
                 withAnimation(.default) {
                     self.to = 1 - CGFloat(vm.sequence(id: sequenceId).counter) / CGFloat(vm.sequence(id: sequenceId).timers[vm.sequence(id: sequenceId).currentTimer].duration)
