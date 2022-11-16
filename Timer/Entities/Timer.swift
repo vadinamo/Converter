@@ -11,7 +11,7 @@ struct TimerAction: Hashable {
     var id: UUID = UUID()
     var duration: Int = 0
     var type: String = ""
-    private var isActive: Bool = false
+    var isActive: Bool = false
     
     init(duration: Int, type: String) {
         self.duration = duration

@@ -14,18 +14,20 @@ struct SequenceItemView: View {
     
     @ObservedObject var vm: ViewModel
     @State var time = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    @State var to: CGFloat = 0
+    @State var to: CGFloat = 1
     
     let sequenceId: UUID
     
     var body: some View {
         VStack {
-            NavigationLink {
-                EditSequenceView(vm: vm, sequence: vm.sequence(id: sequenceId))
-            } label: {
-                HStack {
-                    Spacer()
-                    Image(systemName: "square.and.pencil.circle.fill")
+            if !vm.sequence(id: sequenceId).isActive {
+                NavigationLink {
+                    EditSequenceView(vm: vm, sequence: vm.sequence(id: sequenceId))
+                } label: {
+                    HStack {
+                        Spacer()
+                        Image(systemName: "square.and.pencil.circle.fill")
+                    }
                 }
             }
             
@@ -39,17 +41,17 @@ struct SequenceItemView: View {
                             .stroke(TextColor(color: darkMode ? Color.black : Color.white).opacity(0.09), style: StrokeStyle(lineWidth: 35, lineCap: .round))
                             .frame(width: 280, height: 280)
                         Circle()
-                            .trim(from: 0, to: to)
+                            .trim(from: 0, to: self.to)
                             .stroke(vm.sequence(id: sequenceId).color, style: StrokeStyle(lineWidth: 35, lineCap: .round))
                             .frame(width: 280, height: 280)
                     }
                     .rotationEffect(.init(degrees: -90))
                     
                     VStack {
-                        Text("\(vm.sequence(id: sequenceId).counter)")
+                        Text("\(vm.sequence(id: sequenceId).timers[vm.sequence(id: sequenceId).currentTimer].duration - vm.sequence(id: sequenceId).counter)")
                             .font(.system(size: 65))
                             .bold()
-                        Text("\((currentLanguage == "English") ? " of " : " из ")\(15)")
+                        Text("\((currentLanguage == "English") ? "of " : "из ")\(vm.sequence(id: sequenceId).timers[vm.sequence(id: sequenceId).currentTimer].duration)")
                     }
                 }
                 .padding()
@@ -89,13 +91,18 @@ struct SequenceItemView: View {
             
             List {
                 ForEach(0..<vm.sequence(id: sequenceId).timers.count, id: \.self) { i in
-                    HStack {
-                        Image(systemName: actionImages[vm.sequence(id: sequenceId).timers[i].type] ?? "")
-                        Spacer()
-                        Text(((currentLanguage == "English") ? vm.sequence(id: sequenceId).timers[i].type : typesLocale[vm.sequence(id: sequenceId).timers[i].type]) ?? "")
-                        Spacer()
-                        Text("\(vm.sequence(id: sequenceId).timers[i].duration) \((currentLanguage == "English") ? "s" : "с")")
-                    }
+                    Button(action: { vm.changeTimer(id: sequenceId, newTimer: i) }, label: {
+                        HStack {
+                            Image(systemName: actionImages[vm.sequence(id: sequenceId).timers[i].type] ?? "")
+                            Spacer()
+                            if vm.sequence(id: sequenceId).timers[i].isActive {
+                                Image(systemName: "play.fill")
+                            }
+                            Text(((currentLanguage == "English") ? vm.sequence(id: sequenceId).timers[i].type : typesLocale[vm.sequence(id: sequenceId).timers[i].type]) ?? "")
+                            Spacer()
+                            Text("\(vm.sequence(id: sequenceId).timers[i].duration) \((currentLanguage == "English") ? "s" : "с")")
+                        }
+                    })
                 }
                 .foregroundColor(TextColor(color: vm.sequence(id: sequenceId).color))
                 .listRowBackground(vm.sequence(id: sequenceId).color)
@@ -104,11 +111,12 @@ struct SequenceItemView: View {
         .padding()
         .onReceive(self.time, perform: { (_) in
             if vm.sequence(id: sequenceId).isActive {
-                withAnimation(.default) {
-                    self.to = CGFloat(vm.sequence(id: sequenceId).counter) / CGFloat(vm.sequence(id: sequenceId).timers[vm.sequence(id: sequenceId).currentTimer].duration)
-                }
                 vm.tick(id: sequenceId)
+                withAnimation(.default) {
+                    self.to = 1 - CGFloat(vm.sequence(id: sequenceId).counter) / CGFloat(vm.sequence(id: sequenceId).timers[vm.sequence(id: sequenceId).currentTimer].duration)
+                }
             }
+            print(vm.sequence(id: sequenceId).counter)
         })
     }
 }

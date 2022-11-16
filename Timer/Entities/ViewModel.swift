@@ -17,6 +17,7 @@ class ViewModel: ObservableObject {
     func EditSequence(sequence: Sequence) {
         if let i = sequences.firstIndex(where: {$0.id == sequence.id}) {
             sequences[i] = sequence
+            reset(id: sequence.id)
         }
     }
     
@@ -30,18 +31,32 @@ class ViewModel: ObservableObject {
     
     func tick(id: UUID) {
         if let i = sequences.firstIndex(where: {$0.id == id}) {
+            if sequences[i].currentTimer == 0 && sequences[i].timers[0].isActive == false {
+                sequences[i].timers[0].isActive = true
+            }
             if sequences[i].timers[sequences[i].currentTimer].duration > sequences[i].counter {
                 sequences[i].counter += 1
             }
             else {
                 if sequences[i].currentTimer < sequences[i].timers.count - 1 {
                     sequences[i].counter = 0
+                    sequences[i].timers[sequences[i].currentTimer].isActive = false
                     sequences[i].currentTimer += 1
+                    sequences[i].timers[sequences[i].currentTimer].isActive = true
                 }
                 else {
-                    sequences[i].isActive = false
+                    reset(id: id)
                 }
             }
+        }
+    }
+    
+    func changeTimer(id: UUID, newTimer: Int) {
+        if let i = sequences.firstIndex(where: {$0.id == id}) {
+            sequences[i].timers[sequences[i].currentTimer].isActive = false
+            sequences[i].currentTimer = newTimer
+            sequences[i].timers[newTimer].isActive = true
+            sequences[i].counter = 0
         }
     }
     
@@ -53,8 +68,9 @@ class ViewModel: ObservableObject {
     
     func reset(id: UUID) {
         if let i = sequences.firstIndex(where: {$0.id == id}) {
-            sequences[i].currentTimer = 0
+            sequences[i].timers[sequences[i].currentTimer].isActive = false
             sequences[i].isActive = false
+            sequences[i].currentTimer = 0
             sequences[i].counter = 0
         }
     }

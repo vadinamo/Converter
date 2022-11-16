@@ -38,6 +38,7 @@
 		BE78890729225A1000ECF3B4 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		BEA693B22924156B00927CC7 /* SequenceItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceItemView.swift; sourceTree = "<group>"; };
 		BEA693B42924195300927CC7 /* EditSequenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSequenceView.swift; sourceTree = "<group>"; };
+		BEA693B629246E7000927CC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		BEB99E8C2921CC8100F2CDC2 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -101,6 +102,7 @@
 		BE75D2812921A694000A06D4 /* Timer */ = {
 			isa = PBXGroup;
 			children = (
+				BEA693B629246E7000927CC7 /* Info.plist */,
 				BE2767792922877200134660 /* Entities */,
 				BE33F02B292250D7009F827F /* Views */,
 				BEB99E8B2921CC7400F2CDC2 /* Extensions */,
@@ -350,6 +352,7 @@
 				DEVELOPMENT_TEAM = TKY92P34B4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Timer/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -379,6 +382,7 @@
 				DEVELOPMENT_TEAM = TKY92P34B4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Timer/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
