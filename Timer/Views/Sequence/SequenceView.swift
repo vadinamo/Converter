@@ -56,7 +56,7 @@ struct SequenceView: View {
                         .padding()
                     }
                     .onMove { indexSet, index in
-                        vm.sequences.move(fromOffsets: indexSet, toOffset: index)
+                        vm.MoveSequence(indexSet: indexSet, index: index)
                     }
                 }
                 

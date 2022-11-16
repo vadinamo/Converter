@@ -13,6 +13,8 @@ struct SettingsView: View {
     @AppStorage("currentLanguage") private var currentLanguage = "English"
     @AppStorage("currentFontSize") private var currentFontSize = "Small"
     
+    @ObservedObject var vm: ViewModel
+    
     var body: some View {
         VStack {
             Toggle(isOn: $darkMode.animation(), label: {
@@ -41,6 +43,24 @@ struct SettingsView: View {
                               $0 : fontsLocale[$0]) ?? "")
                     }
                 }
+            }
+            
+            HStack {
+                Text((currentLanguage == "English") ?
+                     "Clear data" : "Очистить данные")
+                
+                Spacer()
+                
+                Button(action: {
+                    vm.Clear()
+                }, label: {
+                    ZStack {
+                        Circle().frame(width: CGFloat((fontSizes[currentFontSize] ?? 0) * 2), height: CGFloat((fontSizes[currentFontSize] ?? 0) * 2))
+                            .foregroundColor(Color.Accent)
+                        Image(systemName: "trash.fill")
+                            .foregroundColor(TextColor(color: Color.Accent))
+                    }
+                })
             }
             
             Spacer()

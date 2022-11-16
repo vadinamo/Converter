@@ -30,7 +30,7 @@ struct ContentView: View {
                          "Sequences" : "Последовательности")
                 }
             
-            SettingsView()
+            SettingsView(vm: vm)
                 .tabItem {
                     Image(systemName: "gearshape.fill")
                     Text((currentLanguage == "English") ?

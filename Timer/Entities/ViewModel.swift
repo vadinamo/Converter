@@ -33,6 +33,17 @@ class ViewModel: ObservableObject {
         self.sequences = ApplicationDB().GetSequences()
     }
     
+    func MoveSequence(indexSet: IndexSet, index: Int) {
+        self.sequences.move(fromOffsets: indexSet, toOffset: index)
+        ApplicationDB().hardUpdate(sequences: sequences)
+        self.sequences = ApplicationDB().GetSequences()
+    }
+    
+    func Clear() {
+        ApplicationDB().clear()
+        self.sequences = ApplicationDB().GetSequences()
+    }
+    
     func sequence(id: UUID) -> Sequence {
         if let i = sequences.firstIndex(where: {$0.id == id}) {
             return sequences[i]
@@ -76,7 +87,14 @@ class ViewModel: ObservableObject {
     
     func toggle(id: UUID) {
         if let i = sequences.firstIndex(where: {$0.id == id}) {
+            for j in sequences {
+                if j.id != sequences[i].id {
+                    reset(id: j.id)
+                }
+            }
             sequences[i].isActive.toggle()
+            ApplicationDB().SequenceUpdate(sequence: sequence(id: id))
+            self.sequences = ApplicationDB().GetSequences()
         }
     }
     
@@ -86,6 +104,9 @@ class ViewModel: ObservableObject {
             sequences[i].isActive = false
             sequences[i].currentTimer = 0
             sequences[i].counter = 0
+            
+            ApplicationDB().hardUpdate(sequences: sequences)
+            self.sequences = ApplicationDB().GetSequences()
         }
     }
 }

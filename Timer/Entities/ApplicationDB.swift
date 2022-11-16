@@ -214,4 +214,22 @@ class ApplicationDB {
                        blue: CGFloat((components[2] as NSString).floatValue),
                        alpha: CGFloat((components[3] as NSString).floatValue))
     }
+    
+    public func hardUpdate(sequences: [Sequence]) {
+        clear()
+        for sequence in sequences {
+            AddSequence(sequence: sequence)
+        }
+    }
+    
+    public func clear() {
+        do {
+            try db.run(timers.delete())
+            try db.run(sequences.delete())
+        } catch {
+            print(error.localizedDescription)
+            print(error)
+            print(error.self)
+        }
+    }
 }
