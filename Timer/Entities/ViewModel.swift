@@ -109,4 +109,33 @@ class ViewModel: ObservableObject {
             self.sequences = ApplicationDB().GetSequences()
         }
     }
+    
+    func AddBackground(id: UUID, timeSpent: Int) {
+        if let i = sequences.firstIndex(where: {$0.id == id}) {
+            var counter = timeSpent
+            
+            for _ in sequences[i].currentTimer..<sequences[i].timers.count {
+                if counter > sequences[i].counter {
+                    counter -= sequences[i].timers[sequences[i].currentTimer].duration
+                    sequences[i].currentTimer += 1
+                    if sequences[i].currentTimer == sequences[i].timers.count {
+                        sequences[i].currentTimer -= 1
+                        reset(id: sequences[i].id)
+                        ApplicationDB().SequenceUpdate(sequence: sequences[i])
+                        self.sequences = ApplicationDB().GetSequences()
+                        return
+                    }
+                    sequences[i].counter = 0
+                    ApplicationDB().SequenceUpdate(sequence: sequences[i])
+                    self.sequences = ApplicationDB().GetSequences()
+                }
+                else if counter < sequences[i].timers[sequences[i].currentTimer].duration {
+                    sequences[i].counter -= counter
+                    ApplicationDB().SequenceUpdate(sequence: sequences[i])
+                    self.sequences = ApplicationDB().GetSequences()
+                    return
+                }
+            }
+        }
+    }
 }

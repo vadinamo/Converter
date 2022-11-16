@@ -9,6 +9,10 @@ import SwiftUI
 import AVFoundation
 
 struct SequenceItemView: View {
+    @Environment(\.scenePhase) var scenePhase
+    @State var startBackground: Date!
+    @State var endBackground: Date!
+    
     @AppStorage("currentFontSize") private var currentFontSize = "Small"
     @AppStorage("currentLanguage") private var currentLanguage = "English"
     @AppStorage("darkMode") private var darkMode = false
@@ -123,5 +127,14 @@ struct SequenceItemView: View {
             }
             print(vm.sequence(id: sequenceId).counter)
         })
+        .onChange(of: scenePhase) { phase in
+            if phase == .background {
+                startBackground = Date()
+            }
+            else if phase == .active && vm.sequence(id: sequenceId).isActive {
+                endBackground = Date()
+                vm.AddBackground(id: sequenceId, timeSpent: ((Int(endBackground.timeIntervalSince1970)) - (Int(startBackground.timeIntervalSince1970))))
+            }
+        }
     }
 }
