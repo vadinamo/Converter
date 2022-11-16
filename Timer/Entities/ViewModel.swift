@@ -100,7 +100,9 @@ class ViewModel: ObservableObject {
     
     func reset(id: UUID) {
         if let i = sequences.firstIndex(where: {$0.id == id}) {
-            sequences[i].timers[sequences[i].currentTimer].isActive = false
+            if sequences[i].timers.count != 0 {
+                sequences[i].timers[sequences[i].currentTimer].isActive = false
+            }
             sequences[i].isActive = false
             sequences[i].currentTimer = 0
             sequences[i].counter = 0
@@ -117,7 +119,11 @@ class ViewModel: ObservableObject {
             for _ in sequences[i].currentTimer..<sequences[i].timers.count {
                 if counter > sequences[i].counter {
                     counter -= sequences[i].timers[sequences[i].currentTimer].duration
+                    
+                    
+                    sequences[i].timers[sequences[i].currentTimer].isActive = false
                     sequences[i].currentTimer += 1
+                    
                     if sequences[i].currentTimer == sequences[i].timers.count {
                         sequences[i].currentTimer -= 1
                         reset(id: sequences[i].id)
@@ -125,6 +131,9 @@ class ViewModel: ObservableObject {
                         self.sequences = ApplicationDB().GetSequences()
                         return
                     }
+                    
+                    sequences[i].timers[sequences[i].currentTimer].isActive = true
+                    
                     sequences[i].counter = 0
                     ApplicationDB().SequenceUpdate(sequence: sequences[i])
                     self.sequences = ApplicationDB().GetSequences()

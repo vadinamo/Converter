@@ -10,7 +10,7 @@ import AVFoundation
 
 struct SequenceItemView: View {
     @Environment(\.scenePhase) var scenePhase
-    @State var startBackground: Date!
+    @AppStorage("startBackground") private var startBackground: Int = Int(Date().timeIntervalSince1970)
     @State var endBackground: Date!
     
     @AppStorage("currentFontSize") private var currentFontSize = "Small"
@@ -122,18 +122,20 @@ struct SequenceItemView: View {
                 }
                 vm.tick(id: sequenceId)
                 withAnimation(.default) {
-                    self.to = 1 - CGFloat(vm.sequence(id: sequenceId).counter) / CGFloat(vm.sequence(id: sequenceId).timers[vm.sequence(id: sequenceId).currentTimer].duration)
+                    if vm.sequence(id: sequenceId).timers[vm.sequence(id: sequenceId).currentTimer].duration != 0 {
+                        self.to = 1 - CGFloat(vm.sequence(id: sequenceId).counter) / CGFloat(vm.sequence(id: sequenceId).timers[vm.sequence(id: sequenceId).currentTimer].duration)
+                    }
                 }
             }
             print(vm.sequence(id: sequenceId).counter)
         })
         .onChange(of: scenePhase) { phase in
             if phase == .background {
-                startBackground = Date()
+                startBackground = Int(Date().timeIntervalSince1970)
             }
             else if phase == .active && vm.sequence(id: sequenceId).isActive {
                 endBackground = Date()
-                vm.AddBackground(id: sequenceId, timeSpent: ((Int(endBackground.timeIntervalSince1970)) - (Int(startBackground.timeIntervalSince1970))))
+                vm.AddBackground(id: sequenceId, timeSpent: ((Int(endBackground.timeIntervalSince1970)) - startBackground))
             }
         }
     }
