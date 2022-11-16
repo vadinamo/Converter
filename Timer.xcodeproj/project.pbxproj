@@ -10,6 +10,8 @@
 		BE27677B2922877D00134660 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE27677A2922877D00134660 /* Timer.swift */; };
 		BE27677D2922FC0F00134660 /* Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE27677C2922FC0F00134660 /* Sequence.swift */; };
 		BE27677F2923000300134660 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE27677E2923000300134660 /* ViewModel.swift */; };
+		BE5E56FD292476940042E21F /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = BE5E56FC292476940042E21F /* SQLite */; };
+		BE5E56FF292476C50042E21F /* ApplicationDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E56FE292476C50042E21F /* ApplicationDB.swift */; };
 		BE75D2832921A694000A06D4 /* TimerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE75D2822921A694000A06D4 /* TimerApp.swift */; };
 		BE75D2852921A694000A06D4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE75D2842921A694000A06D4 /* ContentView.swift */; };
 		BE75D2872921A696000A06D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE75D2862921A696000A06D4 /* Assets.xcassets */; };
@@ -27,6 +29,7 @@
 		BE27677A2922877D00134660 /* Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		BE27677C2922FC0F00134660 /* Sequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sequence.swift; sourceTree = "<group>"; };
 		BE27677E2923000300134660 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		BE5E56FE292476C50042E21F /* ApplicationDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationDB.swift; sourceTree = "<group>"; };
 		BE75D27F2921A694000A06D4 /* Timer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Timer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE75D2822921A694000A06D4 /* TimerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerApp.swift; sourceTree = "<group>"; };
 		BE75D2842921A694000A06D4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -47,6 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE5E56FD292476940042E21F /* SQLite in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,6 +63,7 @@
 				BE27677A2922877D00134660 /* Timer.swift */,
 				BE27677C2922FC0F00134660 /* Sequence.swift */,
 				BE27677E2923000300134660 /* ViewModel.swift */,
+				BE5E56FE292476C50042E21F /* ApplicationDB.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -155,6 +160,9 @@
 			dependencies = (
 			);
 			name = Timer;
+			packageProductDependencies = (
+				BE5E56FC292476940042E21F /* SQLite */,
+			);
 			productName = Timer;
 			productReference = BE75D27F2921A694000A06D4 /* Timer.app */;
 			productType = "com.apple.product-type.application";
@@ -183,6 +191,9 @@
 				Base,
 			);
 			mainGroup = BE75D2762921A694000A06D4;
+			packageReferences = (
+				BE5E56FB292476940042E21F /* XCRemoteSwiftPackageReference "SQLite.swift" */,
+			);
 			productRefGroup = BE75D2802921A694000A06D4 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -220,6 +231,7 @@
 				BE27677B2922877D00134660 /* Timer.swift in Sources */,
 				BE7889052922598E00ECF3B4 /* NewSequenceView.swift in Sources */,
 				BE27677D2922FC0F00134660 /* Sequence.swift in Sources */,
+				BE5E56FF292476C50042E21F /* ApplicationDB.swift in Sources */,
 				BE75D2962921BF54000A06D4 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -423,6 +435,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		BE5E56FB292476940042E21F /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		BE5E56FC292476940042E21F /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BE5E56FB292476940042E21F /* XCRemoteSwiftPackageReference "SQLite.swift" */;
+			productName = SQLite;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BE75D2772921A694000A06D4 /* Project object */;
 }
