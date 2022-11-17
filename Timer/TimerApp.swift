@@ -9,6 +9,17 @@ import SwiftUI
 
 @main
 struct TimerApp: App {
+    init() {
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if let error = error {
+                print("error: \(error)")
+            } else {
+                print("success")
+            }
+        }
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView(vm: ViewModel())

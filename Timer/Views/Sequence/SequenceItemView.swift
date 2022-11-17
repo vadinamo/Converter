@@ -132,15 +132,18 @@ struct SequenceItemView: View {
         .onAppear() {
             if vm.sequence(id: sequenceId).isActive {
                 endBackground = Date()
+                vm.RemoveNotifications()
                 vm.AddBackground(id: sequenceId, timeSpent: Int(round(endBackground.timeIntervalSince(startBackground))))
             }
         }
         .onChange(of: scenePhase) { phase in
             if phase == .background {
                 startBackground = Date()
+                vm.AddNotifications(id: sequenceId)
             }
             else if phase == .active && vm.sequence(id: sequenceId).isActive {
                 endBackground = Date()
+                vm.RemoveNotifications()
                 vm.AddBackground(id: sequenceId, timeSpent: Int(round(endBackground.timeIntervalSince(startBackground))))
             }
         }

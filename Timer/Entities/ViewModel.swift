@@ -9,6 +9,7 @@ import SwiftUI
 
 class ViewModel: ObservableObject {
     @Published public var sequences: [Sequence]
+    @AppStorage("currentLanguage") private var currentLanguage = "English"
     
     init() {
         self.sequences = ApplicationDB().GetSequences()
@@ -145,5 +146,70 @@ class ViewModel: ObservableObject {
                 }
             }
         }
+    }
+    
+    func AddNotifications(id: UUID) {
+        if let i = sequences.firstIndex(where: {$0.id == id}) {
+            var count = sequences[i].timers[sequences[i].currentTimer].duration - sequences[i].counter
+            var next_type = ""
+            var next_duration = 0
+            
+            if sequences[i].currentTimer < sequences[i].timers.count {
+                next_type = sequences[i].timers[sequences[i].currentTimer + 1].type
+                next_duration = sequences[i].timers[sequences[i].currentTimer + 1].duration
+            }
+            
+            AddNotification(current_duration: count, next_duration: next_duration, current_type: sequences[i].timers[sequences[i].currentTimer].type, next_type: next_type)
+            
+            for j in sequences[i].currentTimer + 1..<sequences[i].timers.count {
+                count += sequences[i].timers[j].duration
+                next_type = ""
+                next_duration = 0
+                
+                if j < sequences[i].timers.count - 1 {
+                    next_type = sequences[i].timers[j + 1].type
+                    next_duration = sequences[i].timers[j + 1].duration
+                }
+                
+                print(next_type)
+                AddNotification(current_duration: count, next_duration: next_duration, current_type: sequences[i].timers[j].type, next_type: next_type)
+            }
+        }
+    }
+    
+    private func AddNotification(current_duration: Int, next_duration: Int, current_type: String, next_type: String) {
+        let notificationCenter = UNUserNotificationCenter.current()
+        
+        let notificationContent = UNMutableNotificationContent()
+        notificationContent.title = (currentLanguage == "English") ? "Timer" : "Таймер"
+        
+        if next_type != "" {
+            notificationContent.body =  (currentLanguage == "English") ? "End of \(current_type), begin of \(next_type) (\(next_duration) s)" :
+            "Конец \(typesLocale[current_type] ?? ""), начало \(typesLocale[next_type] ?? "") (\(next_duration) с)"
+        }
+        else {
+            notificationContent.body =  (currentLanguage == "English") ? "End of \(current_type), training is over" :
+            "Конец \(typesLocale[current_type] ?? ""), тренировка закончена"
+        }
+        
+        notificationContent.sound = .default
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: Double(current_duration), repeats: false)
+        
+        let request = UNNotificationRequest(
+            identifier: UUID().uuidString,
+            content: notificationContent,
+            trigger: trigger)
+        
+        notificationCenter.add(request) { error in
+            if let error = error {
+                print(error)
+            }
+        }
+    }
+    
+    func RemoveNotifications() {
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+        UNUserNotificationCenter.current().removeAllDeliveredNotifications()
     }
 }
