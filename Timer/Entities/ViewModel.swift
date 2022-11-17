@@ -154,7 +154,7 @@ class ViewModel: ObservableObject {
             var next_type = ""
             var next_duration = 0
             
-            if sequences[i].currentTimer < sequences[i].timers.count {
+            if sequences[i].currentTimer + 1 < sequences[i].timers.count {
                 next_type = sequences[i].timers[sequences[i].currentTimer + 1].type
                 next_duration = sequences[i].timers[sequences[i].currentTimer + 1].duration
             }
