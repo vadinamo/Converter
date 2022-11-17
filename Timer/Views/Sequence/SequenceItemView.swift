@@ -10,7 +10,8 @@ import AVFoundation
 
 struct SequenceItemView: View {
     @Environment(\.scenePhase) var scenePhase
-    @State var startBackground: Date!
+    
+    @AppStorage("darkMode") private var startBackground = Date()
     @State var endBackground: Date!
     
     @AppStorage("currentFontSize") private var currentFontSize = "Small"
@@ -128,6 +129,12 @@ struct SequenceItemView: View {
                 }
             }
         })
+        .onAppear() {
+            if vm.sequence(id: sequenceId).isActive {
+                endBackground = Date()
+                vm.AddBackground(id: sequenceId, timeSpent: Int(round(endBackground.timeIntervalSince(startBackground))))
+            }
+        }
         .onChange(of: scenePhase) { phase in
             if phase == .background {
                 startBackground = Date()

@@ -82,7 +82,6 @@ class ApplicationDB {
                                          timer_is_active <- timer.isActive,
                                          timer_sequence_id <- sequence.id))
             }
-            print(colorToString(color: UIColor(sequence.color)))
             try db.run(sequences.insert(sequence_id <- sequence.id,
                                         sequence_name <- sequence.name,
                                         sequence_color <- colorToString(color: UIColor(sequence.color)),

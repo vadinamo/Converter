@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BE1EF8F52926D6E7008D0C39 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1EF8F42926D6E7008D0C39 /* Date.swift */; };
 		BE27677B2922877D00134660 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE27677A2922877D00134660 /* Timer.swift */; };
 		BE27677D2922FC0F00134660 /* Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE27677C2922FC0F00134660 /* Sequence.swift */; };
 		BE27677F2923000300134660 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE27677E2923000300134660 /* ViewModel.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BE1EF8F42926D6E7008D0C39 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		BE27677A2922877D00134660 /* Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		BE27677C2922FC0F00134660 /* Sequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sequence.swift; sourceTree = "<group>"; };
 		BE27677E2923000300134660 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				BEB99E8C2921CC8100F2CDC2 /* Color.swift */,
+				BE1EF8F42926D6E7008D0C39 /* Date.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -227,6 +230,7 @@
 				BEB99E8D2921CC8100F2CDC2 /* Color.swift in Sources */,
 				BE75D2832921A694000A06D4 /* TimerApp.swift in Sources */,
 				BE27677B2922877D00134660 /* Timer.swift in Sources */,
+				BE1EF8F52926D6E7008D0C39 /* Date.swift in Sources */,
 				BE7889052922598E00ECF3B4 /* NewSequenceView.swift in Sources */,
 				BE27677D2922FC0F00134660 /* Sequence.swift in Sources */,
 				BE5E56FF292476C50042E21F /* ApplicationDB.swift in Sources */,
