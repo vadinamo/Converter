@@ -139,7 +139,9 @@ struct SequenceItemView: View {
         .onChange(of: scenePhase) { phase in
             if phase == .background {
                 startBackground = Date()
-                vm.AddNotifications(id: sequenceId)
+                if vm.sequence(id: sequenceId).isActive {
+                    vm.AddNotifications(id: sequenceId)
+                }
             }
             else if phase == .active && vm.sequence(id: sequenceId).isActive {
                 endBackground = Date()
