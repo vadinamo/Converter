@@ -11,7 +11,8 @@ import AVFoundation
 struct SequenceItemView: View {
     @Environment(\.scenePhase) var scenePhase
     
-    @AppStorage("darkMode") private var startBackground = Date()
+    @AppStorage("start") private var startBackground = Date()
+    @AppStorage("onNotification") private var onNotification = false
     @State var endBackground: Date!
     
     @AppStorage("currentFontSize") private var currentFontSize = "Small"
@@ -77,7 +78,7 @@ struct SequenceItemView: View {
                     Button(action: {
                         vm.reset(id: sequenceId)
                         withAnimation(.default) {
-                            self.to = 0
+                            self.to = 1
                         }
                     }, label: {
                         ZStack {
@@ -121,7 +122,9 @@ struct SequenceItemView: View {
                     let systemSoundID: SystemSoundID = 1052
                     AudioServicesPlaySystemSound(systemSoundID)
                 }
-                vm.tick(id: sequenceId)
+                if scenePhase != .inactive {
+                    vm.tick(id: sequenceId)
+                }
                 withAnimation(.default) {
                     if vm.sequence(id: sequenceId).timers[vm.sequence(id: sequenceId).currentTimer].duration != 0 {
                         self.to = 1 - CGFloat(vm.sequence(id: sequenceId).counter) / CGFloat(vm.sequence(id: sequenceId).timers[vm.sequence(id: sequenceId).currentTimer].duration)
@@ -137,17 +140,21 @@ struct SequenceItemView: View {
             }
         }
         .onChange(of: scenePhase) { phase in
-            if phase == .background {
+            if (phase == .background || phase == .inactive) && !onNotification {
                 startBackground = Date()
+                
                 if vm.sequence(id: sequenceId).isActive {
                     vm.AddNotifications(id: sequenceId)
+                    onNotification = true
                 }
             }
             else if phase == .active && vm.sequence(id: sequenceId).isActive {
                 endBackground = Date()
                 vm.RemoveNotifications()
                 vm.AddBackground(id: sequenceId, timeSpent: Int(round(endBackground.timeIntervalSince(startBackground))))
+                onNotification = false
             }
         }
     }
 }
+    

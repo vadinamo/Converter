@@ -10,6 +10,7 @@ import SwiftUI
 class ViewModel: ObservableObject {
     @Published public var sequences: [Sequence]
     @AppStorage("currentLanguage") private var currentLanguage = "English"
+    @AppStorage("onNotification") private var onNotification = false
     
     init() {
         self.sequences = ApplicationDB().GetSequences()
@@ -104,6 +105,7 @@ class ViewModel: ObservableObject {
             if sequences[i].timers.count != 0 {
                 sequences[i].timers[sequences[i].currentTimer].isActive = false
             }
+            onNotification = false
             sequences[i].isActive = false
             sequences[i].currentTimer = 0
             sequences[i].counter = 0
@@ -171,7 +173,6 @@ class ViewModel: ObservableObject {
                     next_duration = sequences[i].timers[j + 1].duration
                 }
                 
-                print(next_type)
                 AddNotification(current_duration: count, next_duration: next_duration, current_type: sequences[i].timers[j].type, next_type: next_type)
             }
         }
@@ -184,12 +185,12 @@ class ViewModel: ObservableObject {
         notificationContent.title = (currentLanguage == "English") ? "Timer" : "Таймер"
         
         if next_type != "" {
-            notificationContent.body =  (currentLanguage == "English") ? "End of \(current_type), begin of \(next_type) (\(next_duration) s)" :
-            "Конец \(typesLocale[current_type] ?? ""), начало \(typesLocale[next_type] ?? "") (\(next_duration) с)"
+            notificationContent.body =  (currentLanguage == "English") ? "End of \"\(current_type)\", begin of \"\(next_type)\" (\(next_duration) s)" :
+            "Конец \"\(typesLocale[current_type] ?? "")\", начало \"\(typesLocale[next_type] ?? "")\" (\(next_duration) с)"
         }
         else {
-            notificationContent.body =  (currentLanguage == "English") ? "End of \(current_type), training is over" :
-            "Конец \(typesLocale[current_type] ?? ""), тренировка закончена"
+            notificationContent.body =  (currentLanguage == "English") ? "End of \"\(current_type)\", training is over" :
+            "Конец \"\(typesLocale[current_type] ?? "")\", тренировка закончена"
         }
         
         notificationContent.sound = .default
