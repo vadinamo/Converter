@@ -175,6 +175,8 @@ class ViewModel: ObservableObject {
                 
                 AddNotification(current_duration: count, next_duration: next_duration, current_type: sequences[i].timers[j].type, next_type: next_type)
             }
+            
+            onNotification = true
         }
     }
     
@@ -212,5 +214,6 @@ class ViewModel: ObservableObject {
     func RemoveNotifications() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+        onNotification = false
     }
 }

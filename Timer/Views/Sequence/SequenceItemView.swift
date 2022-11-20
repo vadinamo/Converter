@@ -145,14 +145,12 @@ struct SequenceItemView: View {
                 
                 if vm.sequence(id: sequenceId).isActive {
                     vm.AddNotifications(id: sequenceId)
-                    onNotification = true
                 }
             }
             else if phase == .active && vm.sequence(id: sequenceId).isActive {
                 endBackground = Date()
                 vm.RemoveNotifications()
                 vm.AddBackground(id: sequenceId, timeSpent: Int(round(endBackground.timeIntervalSince(startBackground))))
-                onNotification = false
             }
         }
     }
