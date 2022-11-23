@@ -39,6 +39,11 @@ class ViewModel: ObservableObject {
     }
     
     func inputValue(value: String) {
+        if (several_items_operations.contains(where: {$0 == value}) || value == "!") && (cursorIndex == 0 ||
+            several_items_operations.contains(where: {$0 == input[cursorIndex - 1]})) {
+            return
+        }
+        
         var val = value
         self.input = input.replacingOccurrences(of: cursorSymbol, with: "")
         let start = input.prefix(cursorIndex)
