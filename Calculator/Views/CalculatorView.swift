@@ -10,6 +10,9 @@ import SwiftUI
 struct CalculatorView: View {
     @AppStorage("scientific") private var isScientific = true
     
+    @ObservedObject var vm: ViewModel
+    @State var output = ""
+    
     var buttons: [[Buttons]] {
         if !isScientific {
             return [
@@ -37,10 +40,29 @@ struct CalculatorView: View {
     
     var body: some View {
         VStack {
-            Text("")
+            ScrollView {
+                VStack {
+                    Spacer()
+                    HStack {
+                        Text(vm.input)
+                        Spacer()
+                    }
+                }
+            }
             Spacer()
+            ScrollView {
+                VStack {
+                    Spacer()
+                    HStack {
+                        Text("result")
+                        Spacer()
+                    }
+                }
+            }
             keyboard
-        }.padding()
+        }
+        .padding()
+        .preferredColorScheme(.dark)
     }
     
     var width: CGFloat {
@@ -124,10 +146,25 @@ struct CalculatorView: View {
     
     func buttonTap(button: Buttons) {
         switch button {
+        case .calculate:
+            break
         case .swapKeyboard:
             isScientific.toggle()
             break
+        case .left:
+            vm.moveCursorLeft()
+            break
+        case .right:
+            vm.moveCursorRight()
+            break
+        case .clear:
+            vm.clear()
+            break
+        case .remove:
+            vm.removeSymbol()
+            break
         default:
+            vm.inputValue(value: button.rawValue)
             break
         }
     }

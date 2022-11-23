@@ -38,7 +38,7 @@ enum Buttons : String {
     case tg = "tg"
     case ctg = "ctg"
     
-    case pow = "X^Y"
+    case pow = "^"
     case pi = "pi"
     case exp = "e"
     case lg = "lg"

@@ -7,15 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BE761B00292E92AF0006026A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE761AFF292E92AF0006026A /* String.swift */; };
 		BE858DF7292B7C14004DEF25 /* CalculatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE858DF6292B7C14004DEF25 /* CalculatorApp.swift */; };
 		BE858DF9292B7C14004DEF25 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE858DF8292B7C14004DEF25 /* ContentView.swift */; };
 		BE858DFB292B7C15004DEF25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE858DFA292B7C15004DEF25 /* Assets.xcassets */; };
 		BE858DFE292B7C15004DEF25 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE858DFD292B7C15004DEF25 /* Preview Assets.xcassets */; };
 		BE858E06292B7C9A004DEF25 /* CalculatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE858E05292B7C9A004DEF25 /* CalculatorView.swift */; };
 		BE858E08292B7D1B004DEF25 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE858E07292B7D1B004DEF25 /* Buttons.swift */; };
+		BEE396B1292E6EF2009E7671 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE396B0292E6EF2009E7671 /* ViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BE761AFF292E92AF0006026A /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		BE858DF3292B7C14004DEF25 /* Calculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Calculator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE858DF6292B7C14004DEF25 /* CalculatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorApp.swift; sourceTree = "<group>"; };
 		BE858DF8292B7C14004DEF25 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -23,6 +26,7 @@
 		BE858DFD292B7C15004DEF25 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		BE858E05292B7C9A004DEF25 /* CalculatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorView.swift; sourceTree = "<group>"; };
 		BE858E07292B7D1B004DEF25 /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
+		BEE396B0292E6EF2009E7671 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,6 +40,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BE761AFE292E929C0006026A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				BE761AFF292E92AF0006026A /* String.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		BE858DEA292B7C14004DEF25 = {
 			isa = PBXGroup;
 			children = (
@@ -55,6 +67,7 @@
 		BE858DF5292B7C14004DEF25 /* Calculator */ = {
 			isa = PBXGroup;
 			children = (
+				BE761AFE292E929C0006026A /* Extensions */,
 				BEE396AF292E583D009E7671 /* Entities */,
 				BE858E04292B7C20004DEF25 /* Views */,
 				BE858DF6292B7C14004DEF25 /* CalculatorApp.swift */,
@@ -85,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				BE858E07292B7D1B004DEF25 /* Buttons.swift */,
+				BEE396B0292E6EF2009E7671 /* ViewModel.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -159,6 +173,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE761B00292E92AF0006026A /* String.swift in Sources */,
+				BEE396B1292E6EF2009E7671 /* ViewModel.swift in Sources */,
 				BE858DF9292B7C14004DEF25 /* ContentView.swift in Sources */,
 				BE858E06292B7C9A004DEF25 /* CalculatorView.swift in Sources */,
 				BE858DF7292B7C14004DEF25 /* CalculatorApp.swift in Sources */,
