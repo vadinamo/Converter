@@ -81,6 +81,44 @@ class ViewModel: ObservableObject {
             }
         }
         
+        let check = input.replacingOccurrences(of: cursorSymbol, with: "")
+        
+        if value.isNumber &&
+            (!(cursorIndex == 0 || check[cursorIndex - 1].isNumber || check[cursorIndex - 1] == "(" || several_items_operations.contains(where: {$0 == check[cursorIndex - 1]}) || (check[cursorIndex - 1] == ".")) ||
+             !(cursorIndex == check.count || check[cursorIndex].isNumber || check[cursorIndex] == ")" || several_items_operations.contains(where: {$0 == check[cursorIndex]}) || check[cursorIndex - 1] == ".")) {
+            return
+        }
+        
+        else if (value == "pi" || value == "e") &&
+                    (!(cursorIndex == 0 || check[cursorIndex - 1] == "(" || several_items_operations.contains(where: {$0 == check[cursorIndex - 1]})) ||
+                    !(cursorIndex == check.count || check[cursorIndex] == ")" || several_items_operations.contains(where: {$0 == check[cursorIndex]}))) {
+            return
+        }
+        
+        else if single_items_operations.contains(where: {$0 == value}) && !(cursorIndex == 0 || check[cursorIndex - 1] == "(" || several_items_operations.contains(where: {$0 == check[cursorIndex - 1]})) {
+            return
+        }
+        
+        else if value == "(" && !(cursorIndex == 0 || check[cursorIndex - 1] == "(" || several_items_operations.contains(where: {$0 == check[cursorIndex - 1]})) {
+            return
+        }
+        
+        else if value == ")" {
+            var stack: [String] = []
+            for s in check {
+                if s == "(" {
+                    stack.append("(")
+                }
+                else if s == ")" {
+                    stack.removeLast()
+                }
+            }
+            
+            if stack.count == 0 {
+                return
+            }
+        }
+        
         var val = value
         self.input = input.replacingOccurrences(of: cursorSymbol, with: "")
         let start = input.prefix(cursorIndex)

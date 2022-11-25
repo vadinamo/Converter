@@ -14,3 +14,13 @@ var several_items_operations = [
     "/",
     "^"
 ]
+
+var single_items_operations = [
+    "sin",
+    "cos",
+    "tg",
+    "ctg",
+    "ln",
+    "log",
+    "!"
+]
