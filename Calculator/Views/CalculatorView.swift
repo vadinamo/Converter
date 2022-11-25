@@ -8,20 +8,17 @@
 import SwiftUI
 
 struct CalculatorView: View {
+    @State private var orientation = UIDevice.current.orientation
     @AppStorage("scientific") private var isScientific = true
     
     @ObservedObject var vm: ViewModel
     @State var output = ""
     
-    var buttons: [[Buttons]] {
-        if !isScientific {
+    var topButtons: [[Buttons]] {
+        if !isScientific && !(orientation.isLandscape || UIScreen.main.bounds.height < UIScreen.main.bounds.width) {
             return [
                 [.left, .right],
-                [.calculate, .clear, .remove],
-                [.seven, .eight, .nine, .plus],
-                [.four, .five, .six, .minus],
-                [.one, .two, .three, .multiply],
-                [.swapKeyboard, .zero, .dot, .divide]
+                [.calculate, .clear, .remove]
             ]
         }
         
@@ -29,40 +26,47 @@ struct CalculatorView: View {
             [.left, .right],
             [.sin, .cos, .tg, .ctg, .calculate],
             [.pow, .pi, .exp, .lg, .ln],
-            [.factorial, .leftBracket, .rightBracket, .clear, .remove],
+            [.factorial, .leftBracket, .rightBracket, .clear, .remove]
+        ]
+    }
+    
+    var bottomButtons: [[Buttons]] {
+        return [
             [.seven, .eight, .nine, .plus],
             [.four, .five, .six, .minus],
             [.one, .two, .three, .multiply],
-            [.swapKeyboard, .zero, .dot, .divide],
+            [.swapKeyboard, .zero, .dot, .divide]
         ]
     }
     
     
     var body: some View {
-        VStack {
-            ScrollView {
+        ZStack {
+            if orientation.isLandscape || UIScreen.main.bounds.height < UIScreen.main.bounds.width {
                 VStack {
-                    Spacer()
+                    info
                     HStack {
-                        Text(vm.input)
-                        Spacer()
+                        topButtonsView
+                        bottomButtonsView
                     }
                 }
             }
-            Spacer()
-            ScrollView {
+            else if orientation.isPortrait || UIScreen.main.bounds.height > UIScreen.main.bounds.width {
                 VStack {
-                    Spacer()
-                    HStack {
-                        Text(vm.output)
-                        Spacer()
-                    }
+                    info
+                    topButtonsView
+                    bottomButtonsView
                 }
             }
-            keyboard
         }
         .padding()
         .preferredColorScheme(.dark)
+        .onAppear {
+            orientation = UIApplication.shared.statusBarOrientation == .portrait ? UIDeviceOrientation.portrait : UIDeviceOrientation.landscapeLeft
+        }
+        .onRotate { newOrientation in
+            orientation = newOrientation
+        }
     }
     
     var width: CGFloat {
@@ -91,10 +95,13 @@ struct CalculatorView: View {
             return (width - (5 * 12)) / (count)
         }
         else if item == .left || item == .right {
-            return (width - (4 * 12)) / count * 2
+            return (width - (4 * 12)) / count * (UIScreen.main.bounds.height < UIScreen.main.bounds.width ? 2.6 : 2)
         }
         else {
-            if isScientific {
+            if UIScreen.main.bounds.height < UIScreen.main.bounds.width {
+                return (width - (5 * 12)) / (count)
+            }
+            else if isScientific {
                 return (width - (5 * 12)) / (count * 1.3)
             }
             else {
@@ -108,11 +115,15 @@ struct CalculatorView: View {
             item == .four || item == .five || item == .six || item == .minus ||
             item == .one || item == .two || item == .three || item == .multiply ||
             item == .swapKeyboard || item == .zero || item == .dot || item == .divide {
-            let cur = CGFloat((isScientific) ? 14 : 5)
+            let cur = CGFloat((isScientific || UIScreen.main.bounds.height < UIScreen.main.bounds.width) ? 14 : 5)
             return (width - (cur * 12)) / (count)
         }
         else {
-            if isScientific {
+            if UIScreen.main.bounds.height < UIScreen.main.bounds.width {
+                let cur = CGFloat((isScientific || UIScreen.main.bounds.height < UIScreen.main.bounds.width) ? 14 : 5)
+                return (width - (cur * 12)) / (count)
+            }
+            else if isScientific {
                 return (width - (5 * 12)) / (count * 2)
             }
             else {
@@ -123,22 +134,73 @@ struct CalculatorView: View {
     
     
     @ViewBuilder
-    var keyboard: some View {
-        ForEach(buttons, id: \.self) { row in
-            HStack {
-                ForEach(row, id: \.self) { item in
-                    Button(action: {
-                        buttonTap(button: item)
-                    }, label: {
-                        item.buttonLabel
-                            .font(isScientific ? .none : .largeTitle)
-                            .foregroundColor(.white)
-                            .frame(
-                                width: self.buttonWidth(item: item),
-                                height: self.buttonHeight(item: item))
-                            .background(item.buttonColor)
-                            .cornerRadius(self.buttonHeight(item: item))
-                    })
+    var topButtonsView: some View {
+        VStack {
+            ForEach(topButtons, id: \.self) { row in
+                HStack {
+                    ForEach(row, id: \.self) { item in
+                        Button(action: {
+                            buttonTap(button: item)
+                        }, label: {
+                            item.buttonLabel
+                                .font((isScientific || UIScreen.main.bounds.height < UIScreen.main.bounds.width) ? .none : .largeTitle)
+                                .foregroundColor(.white)
+                                .frame(
+                                    width: self.buttonWidth(item: item),
+                                    height: self.buttonHeight(item: item))
+                                .background(item.buttonColor)
+                                .cornerRadius(self.buttonHeight(item: item))
+                        })
+                    }
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    var bottomButtonsView: some View {
+        VStack {
+            ForEach(bottomButtons, id: \.self) { row in
+                HStack {
+                    ForEach(row, id: \.self) { item in
+                        Button(action: {
+                            buttonTap(button: item)
+                        }, label: {
+                            item.buttonLabel
+                                .font((isScientific || UIScreen.main.bounds.height < UIScreen.main.bounds.width) ? .none : .largeTitle)
+                                .foregroundColor(.white)
+                                .frame(
+                                    width: self.buttonWidth(item: item),
+                                    height: self.buttonHeight(item: item))
+                                .background(item.buttonColor)
+                                .cornerRadius(self.buttonHeight(item: item))
+                        })
+                    }
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    var info: some View {
+        VStack {
+            ScrollView {
+                VStack {
+                    Spacer()
+                    HStack {
+                        Text(vm.input)
+                        Spacer()
+                    }
+                }
+            }
+            Spacer()
+            ScrollView {
+                VStack {
+                    Spacer()
+                    HStack {
+                        Text(vm.output)
+                        Spacer()
+                    }
                 }
             }
         }
@@ -150,7 +212,9 @@ struct CalculatorView: View {
             vm.calculate()
             break
         case .swapKeyboard:
-            isScientific.toggle()
+            if UIScreen.main.bounds.height > UIScreen.main.bounds.width {
+                isScientific.toggle()
+            }
             break
         case .left:
             vm.moveCursorLeft()
@@ -174,5 +238,24 @@ struct CalculatorView: View {
 struct CalculatorView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+struct DeviceRotationViewModifier: ViewModifier {
+    let action: (UIDeviceOrientation) -> Void
+    
+    func body(content: Content) -> some View {
+        content
+            .onAppear()
+            .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                action(UIDevice.current.orientation)
+            }
+    }
+}
+
+// A View wrapper to make the modifier easier to use
+extension View {
+    func onRotate(perform action: @escaping (UIDeviceOrientation) -> Void) -> some View {
+        self.modifier(DeviceRotationViewModifier(action: action))
     }
 }

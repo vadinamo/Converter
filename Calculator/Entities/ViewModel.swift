@@ -167,6 +167,7 @@ class ViewModel: ObservableObject {
     func clear() {
         self.cursorIndex = 0
         self.input = cursorSymbol
+        self.output = ""
     }
     
     func leftCheck(check: String) -> Bool {
