@@ -54,7 +54,7 @@ struct CalculatorView: View {
                 VStack {
                     Spacer()
                     HStack {
-                        Text("result")
+                        Text(vm.output)
                         Spacer()
                     }
                 }
@@ -147,6 +147,7 @@ struct CalculatorView: View {
     func buttonTap(button: Buttons) {
         switch button {
         case .calculate:
+            vm.calculate()
             break
         case .swapKeyboard:
             isScientific.toggle()

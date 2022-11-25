@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BE08A9E72930E347008B94B9 /* ReversePolishNotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE08A9E62930E347008B94B9 /* ReversePolishNotation.swift */; };
+		BE08A9EA2930E650008B94B9 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = BE08A9E92930E650008B94B9 /* AlertToast */; };
+		BE08A9ED2930E661008B94B9 /* BigDecimal in Frameworks */ = {isa = PBXBuildFile; productRef = BE08A9EC2930E661008B94B9 /* BigDecimal */; };
+		BE08A9F02930EDD8008B94B9 /* ComplexModule in Frameworks */ = {isa = PBXBuildFile; productRef = BE08A9EF2930EDD8008B94B9 /* ComplexModule */; };
+		BE08A9F22930EDD8008B94B9 /* Numerics in Frameworks */ = {isa = PBXBuildFile; productRef = BE08A9F12930EDD8008B94B9 /* Numerics */; };
+		BE08A9F42930EDD8008B94B9 /* RealModule in Frameworks */ = {isa = PBXBuildFile; productRef = BE08A9F32930EDD8008B94B9 /* RealModule */; };
 		BE761B00292E92AF0006026A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE761AFF292E92AF0006026A /* String.swift */; };
 		BE858DF7292B7C14004DEF25 /* CalculatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE858DF6292B7C14004DEF25 /* CalculatorApp.swift */; };
 		BE858DF9292B7C14004DEF25 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE858DF8292B7C14004DEF25 /* ContentView.swift */; };
@@ -19,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BE08A9E62930E347008B94B9 /* ReversePolishNotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReversePolishNotation.swift; sourceTree = "<group>"; };
 		BE761AFF292E92AF0006026A /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		BE858DF3292B7C14004DEF25 /* Calculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Calculator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE858DF6292B7C14004DEF25 /* CalculatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorApp.swift; sourceTree = "<group>"; };
@@ -36,6 +43,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE08A9EA2930E650008B94B9 /* AlertToast in Frameworks */,
+				BE08A9F02930EDD8008B94B9 /* ComplexModule in Frameworks */,
+				BE08A9F22930EDD8008B94B9 /* Numerics in Frameworks */,
+				BE08A9F42930EDD8008B94B9 /* RealModule in Frameworks */,
+				BE08A9ED2930E661008B94B9 /* BigDecimal in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,6 +114,7 @@
 				BE858E07292B7D1B004DEF25 /* Buttons.swift */,
 				BEE396B0292E6EF2009E7671 /* ViewModel.swift */,
 				BED8942B292E9E5C0064E72D /* Operations.swift */,
+				BE08A9E62930E347008B94B9 /* ReversePolishNotation.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -122,6 +135,13 @@
 			dependencies = (
 			);
 			name = Calculator;
+			packageProductDependencies = (
+				BE08A9E92930E650008B94B9 /* AlertToast */,
+				BE08A9EC2930E661008B94B9 /* BigDecimal */,
+				BE08A9EF2930EDD8008B94B9 /* ComplexModule */,
+				BE08A9F12930EDD8008B94B9 /* Numerics */,
+				BE08A9F32930EDD8008B94B9 /* RealModule */,
+			);
 			productName = Calculator;
 			productReference = BE858DF3292B7C14004DEF25 /* Calculator.app */;
 			productType = "com.apple.product-type.application";
@@ -150,6 +170,11 @@
 				Base,
 			);
 			mainGroup = BE858DEA292B7C14004DEF25;
+			packageReferences = (
+				BE08A9E82930E650008B94B9 /* XCRemoteSwiftPackageReference "AlertToast" */,
+				BE08A9EB2930E661008B94B9 /* XCRemoteSwiftPackageReference "BigDecimal" */,
+				BE08A9EE2930EDD8008B94B9 /* XCRemoteSwiftPackageReference "swift-numerics" */,
+			);
 			productRefGroup = BE858DF4292B7C14004DEF25 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -181,6 +206,7 @@
 				BE858DF9292B7C14004DEF25 /* ContentView.swift in Sources */,
 				BED8942C292E9E5C0064E72D /* Operations.swift in Sources */,
 				BE858E06292B7C9A004DEF25 /* CalculatorView.swift in Sources */,
+				BE08A9E72930E347008B94B9 /* ReversePolishNotation.swift in Sources */,
 				BE858DF7292B7C14004DEF25 /* CalculatorApp.swift in Sources */,
 				BE858E08292B7D1B004DEF25 /* Buttons.swift in Sources */,
 			);
@@ -383,6 +409,61 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		BE08A9E82930E650008B94B9 /* XCRemoteSwiftPackageReference "AlertToast" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elai950/AlertToast.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		BE08A9EB2930E661008B94B9 /* XCRemoteSwiftPackageReference "BigDecimal" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Zollerboy1/BigDecimal";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		BE08A9EE2930EDD8008B94B9 /* XCRemoteSwiftPackageReference "swift-numerics" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-numerics.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		BE08A9E92930E650008B94B9 /* AlertToast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BE08A9E82930E650008B94B9 /* XCRemoteSwiftPackageReference "AlertToast" */;
+			productName = AlertToast;
+		};
+		BE08A9EC2930E661008B94B9 /* BigDecimal */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BE08A9EB2930E661008B94B9 /* XCRemoteSwiftPackageReference "BigDecimal" */;
+			productName = BigDecimal;
+		};
+		BE08A9EF2930EDD8008B94B9 /* ComplexModule */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BE08A9EE2930EDD8008B94B9 /* XCRemoteSwiftPackageReference "swift-numerics" */;
+			productName = ComplexModule;
+		};
+		BE08A9F12930EDD8008B94B9 /* Numerics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BE08A9EE2930EDD8008B94B9 /* XCRemoteSwiftPackageReference "swift-numerics" */;
+			productName = Numerics;
+		};
+		BE08A9F32930EDD8008B94B9 /* RealModule */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BE08A9EE2930EDD8008B94B9 /* XCRemoteSwiftPackageReference "swift-numerics" */;
+			productName = RealModule;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BE858DEB292B7C14004DEF25 /* Project object */;
 }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import BigDecimal
 
 
 class ViewModel: ObservableObject {
@@ -13,10 +14,12 @@ class ViewModel: ObservableObject {
     var cursorSymbol: String
     
     @Published var input: String
+    @Published var output: String
     
     init(cursorSymbol: String) {
         self.cursorSymbol = cursorSymbol
         self.input = cursorSymbol
+        self.output = ""
         self.cursorIndex = 0
     }
     
@@ -91,11 +94,11 @@ class ViewModel: ObservableObject {
         
         else if (value == "pi" || value == "e") &&
                     (!leftCheck(check: check) ||
-                    !rightCheck(check: check)) {
+                     !rightCheck(check: check)) {
             return
         }
         
-        else if single_items_operations.contains(where: {$0 == value}) && !leftCheck(check: check) {
+        else if single_items_operations.contains(where: {$0 == value}) && !leftCheck(check: check) && value != "!"{
             return
         }
         
@@ -136,7 +139,7 @@ class ViewModel: ObservableObject {
         if input.replacingOccurrences(of: cursorSymbol, with: "").count > 0 && cursorIndex > 0 {
             self.input = input.replacingOccurrences(of: cursorSymbol, with: "")
             
-            var rightIndex = cursorIndex
+            let rightIndex = cursorIndex
             var leftIndex = rightIndex - 1
             
             while leftIndex > 0 {
@@ -155,6 +158,10 @@ class ViewModel: ObservableObject {
             self.cursorIndex -= (rightIndex - leftIndex)
             self.input = start + cursorSymbol + end
         }
+    }
+    
+    func calculate() {
+        self.output = String(Calculator.calculate(input: rpn(input: input.replacingOccurrences(of: cursorSymbol, with: ""))))
     }
     
     func clear() {

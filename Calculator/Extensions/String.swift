@@ -14,6 +14,12 @@ extension String {
             options: .regularExpression) != nil
     }
     
+    var isLetter: Bool {
+        return self.range(
+            of: "^[a-z]*$", // 1
+            options: .regularExpression) != nil
+    }
+    
     var needBracket: Bool {
         return self != "." &&  self != "(" &&  self != ")" &&
         self != "!" && self != "pi" && self != "e" &&
