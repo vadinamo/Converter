@@ -84,22 +84,22 @@ class ViewModel: ObservableObject {
         let check = input.replacingOccurrences(of: cursorSymbol, with: "")
         
         if value.isNumber &&
-            (!(cursorIndex == 0 || check[cursorIndex - 1].isNumber || check[cursorIndex - 1] == "(" || several_items_operations.contains(where: {$0 == check[cursorIndex - 1]}) || (check[cursorIndex - 1] == ".")) ||
-             !(cursorIndex == check.count || check[cursorIndex].isNumber || check[cursorIndex] == ")" || several_items_operations.contains(where: {$0 == check[cursorIndex]}) || check[cursorIndex - 1] == ".")) {
+            (!(leftCheck(check: check) || check[cursorIndex - 1].isNumber || (check[cursorIndex - 1] == ".")) ||
+             !(rightCheck(check: check) || check[cursorIndex].isNumber || check[cursorIndex] == ".")) {
             return
         }
         
         else if (value == "pi" || value == "e") &&
-                    (!(cursorIndex == 0 || check[cursorIndex - 1] == "(" || several_items_operations.contains(where: {$0 == check[cursorIndex - 1]})) ||
-                    !(cursorIndex == check.count || check[cursorIndex] == ")" || several_items_operations.contains(where: {$0 == check[cursorIndex]}))) {
+                    (!leftCheck(check: check) ||
+                    !rightCheck(check: check)) {
             return
         }
         
-        else if single_items_operations.contains(where: {$0 == value}) && !(cursorIndex == 0 || check[cursorIndex - 1] == "(" || several_items_operations.contains(where: {$0 == check[cursorIndex - 1]})) {
+        else if single_items_operations.contains(where: {$0 == value}) && !leftCheck(check: check) {
             return
         }
         
-        else if value == "(" && !(cursorIndex == 0 || check[cursorIndex - 1] == "(" || several_items_operations.contains(where: {$0 == check[cursorIndex - 1]})) {
+        else if value == "(" && !leftCheck(check: check) {
             return
         }
         
@@ -146,5 +146,13 @@ class ViewModel: ObservableObject {
     func clear() {
         self.cursorIndex = 0
         self.input = cursorSymbol
+    }
+    
+    func leftCheck(check: String) -> Bool {
+        return cursorIndex == 0 || check[cursorIndex - 1] == "(" || several_items_operations.contains(where: {$0 == check[cursorIndex - 1]})
+    }
+    
+    func rightCheck(check: String) -> Bool {
+        return cursorIndex == check.count || check[cursorIndex] == ")" || several_items_operations.contains(where: {$0 == check[cursorIndex]})
     }
 }
