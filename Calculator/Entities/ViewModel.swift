@@ -120,7 +120,7 @@ class ViewModel: ObservableObject {
         }
         
         var val = value
-        self.input = input.replacingOccurrences(of: cursorSymbol, with: "")
+        self.input = check
         let start = input.prefix(cursorIndex)
         let end = input.suffix(input.count - cursorIndex)
         
@@ -135,10 +135,24 @@ class ViewModel: ObservableObject {
     func removeSymbol() {
         if input.replacingOccurrences(of: cursorSymbol, with: "").count > 0 && cursorIndex > 0 {
             self.input = input.replacingOccurrences(of: cursorSymbol, with: "")
-            let start = input.prefix(cursorIndex - 1)
-            let end = input.suffix(input.count - cursorIndex)
             
-            self.cursorIndex -= 1
+            var rightIndex = cursorIndex
+            var leftIndex = rightIndex - 1
+            
+            while leftIndex > 0 {
+                if several_items_operations.contains(where: {$0 == input[leftIndex]}) || (input[leftIndex] == "(" && leftIndex != rightIndex - 1) || input[leftIndex].isNumber || input[leftIndex] == ")" {
+                    if rightIndex - leftIndex > 1 {
+                        leftIndex += 1
+                    }
+                    break
+                }
+                leftIndex -= 1
+            }
+            
+            let start = input.prefix(leftIndex)
+            let end = input.suffix(input.count - rightIndex)
+            
+            self.cursorIndex -= (rightIndex - leftIndex)
             self.input = start + cursorSymbol + end
         }
     }
