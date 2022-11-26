@@ -161,7 +161,7 @@ class ViewModel: ObservableObject {
     }
     
     func calculate() {
-        self.output = String(Calculator.calculate(input: rpn(input: input.replacingOccurrences(of: cursorSymbol, with: ""))))
+        self.output = Calculator.calculate(input: rpn(input: input.replacingOccurrences(of: cursorSymbol, with: "")))
     }
     
     func clear() {

@@ -5,8 +5,8 @@
 //  Created by Вадим Юрьев on 25.11.22.
 //
 
-import _NumericsShims
 import Foundation
+import BigDecimal
 
 
 func completeBrackets(string: String) -> String {
@@ -48,54 +48,14 @@ func completeString(string: String) -> String {
     return completeNegative(string: completeBrackets(string: string))
 }
 
-func factorial(_ n: Int) -> Double {
-  return (1...n).map(Double.init).reduce(1.0, *)
-}
-
-func makeOperation(number1: Double, number2: Double, symbol: String) -> Double {
-    switch symbol {
-    case "+":
-        return number1 + number2
-    case "-":
-        return number2 - number1
-    case "*":
-        return number1 * number2
-    case "/":
-        return number2 / number1
-    case "^":
-        return libm_pow(number2, number1)
-    case "sin":
-        return libm_sin(number1)
-    case "cos":
-        return libm_cos(number1)
-    case "tg":
-        return libm_tan(number1)
-    case "ctg":
-        return 1 / libm_tan(number1)
-    case "!":
-        return factorial(Int(number1))
-    case "ln":
-        return libm_log(number1)
-    case "log":
-        return libm_log10(number1)
-    case "e":
-        return exp(1)
-    case "pi":
-        return 3.141592653589793
-    default:
-        return 0
-    }
-}
-
 func rpn(input: String) -> [String] {
-    var inputStr = completeString(string: input).replacingOccurrences(of: "pi", with: "3.141592653589793").replacingOccurrences(of: "e", with: "2.71828")
+    let inputStr = completeString(string: input).replacingOccurrences(of: "pi", with: "3.141592653589793").replacingOccurrences(of: "e", with: "2.71828")
     
     var stack: [String] = []
     var number = ""
     var operation = ""
     
     var output: [String] = []
-    let letters = CharacterSet.letters
     for i in 0..<inputStr.count {
         if inputStr[i].isLetter || inputStr[i] == "!" {
             operation += inputStr[i]
@@ -146,24 +106,65 @@ func rpn(input: String) -> [String] {
     return output
 }
 
-func calculate(input: [String]) -> Double {
-    var inputStr = input
-    var stack: [Double] = []
+func calculate(input: [String]) -> String {
+    let inputStr = input
+    var stack: [BigDecimal] = []
     
     for s in inputStr {
         if s.contains(where: {$0.isNumber}) {
-            stack.append(Double(s)!)
+            stack.append(BigDecimal(s)!)
         }
         else if single_items_operations.contains(where: {$0 == s}) {
             stack.append(makeOperation(number1: stack.popLast()!, number2: 0, symbol: s))
         }
         else if several_items_operations.contains(where: {$0 == s}) {
-            var a = stack.popLast()
-            var b = stack.popLast()
+            let a = stack.popLast()
+            let b = stack.popLast()
             
             stack.append(makeOperation(number1: a!, number2: b!, symbol: s))
         }
     }
     
-    return stack[0]
+    return period(string: String(stack[0]))
+}
+
+func period(string: String) -> String {
+    let stringCheck = String(string.suffix(string.count - string.distance(of: ".")! - 1))
+    if stringCheck.count < 50 {
+        return string
+    }
+    
+    for count in 1..<stringCheck.count {  // count -- длина просматриваемого периода
+        var i = 0  // i -- стартовый индекс периода
+        let p = stringCheck.prefix(count)  // p -- потенциальный период
+        
+        var period = true
+        while i < stringCheck.count {
+            if i + count < stringCheck.count {
+                let check = stringCheck.substring(with: i..<i + count)
+                if check != p {
+                    period = false
+                    break
+                }
+                i += p.count
+            }
+            else if i < stringCheck.count {
+                let check = stringCheck.substring(with: i..<i + (stringCheck.count - i))
+                if check != p.prefix(check.count) {
+                    period = false
+                    break
+                }
+                break
+            }
+            else {
+                break
+            }
+        }
+        
+        if period {
+            return ("\(string.prefix(string.distance(of: ".")! + 1))(\(p))")
+        }
+    }
+    
+    return string
 }

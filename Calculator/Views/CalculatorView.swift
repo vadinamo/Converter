@@ -45,6 +45,7 @@ struct CalculatorView: View {
             if orientation.isLandscape || UIScreen.main.bounds.height < UIScreen.main.bounds.width {
                 VStack {
                     info
+                    Spacer()
                     HStack {
                         topButtonsView
                         bottomButtonsView
@@ -92,14 +93,15 @@ struct CalculatorView: View {
             item == .four || item == .five || item == .six || item == .minus ||
             item == .one || item == .two || item == .three || item == .multiply ||
             item == .swapKeyboard || item == .zero || item == .dot || item == .divide {
-            return (width - (5 * 12)) / (count)
+            
+            return (width - (5 * 12)) / (count) * (UIScreen.main.bounds.height < UIScreen.main.bounds.width ? 1.2 : 1)
         }
         else if item == .left || item == .right {
-            return (width - (4 * 12)) / count * (UIScreen.main.bounds.height < UIScreen.main.bounds.width ? 2.6 : 2)
+            return (width - (4 * 12)) / count * (UIScreen.main.bounds.height < UIScreen.main.bounds.width ? 3.05 : 2)
         }
         else {
             if UIScreen.main.bounds.height < UIScreen.main.bounds.width {
-                return (width - (5 * 12)) / (count)
+                return (width - (5 * 12)) / (count) * 1.2
             }
             else if isScientific {
                 return (width - (5 * 12)) / (count * 1.3)
