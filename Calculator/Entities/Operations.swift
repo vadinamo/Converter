@@ -47,7 +47,7 @@ var priority: [String: Int] = [
     "!": 4
 ]
 
-func makeOperation(number1: BigDecimal, number2: BigDecimal, symbol: String) -> BigDecimal {
+func makeOperation(number1: BigDecimal, number2: BigDecimal, symbol: String) throws -> BigDecimal {
     let n1: Double = btd(number: number1)
     let n2: Double = btd(number: number2)
     switch symbol {
@@ -58,6 +58,9 @@ func makeOperation(number1: BigDecimal, number2: BigDecimal, symbol: String) -> 
     case "*":
         return number1 * number2
     case "/":
+        if number1 == 0 {
+            throw CalculateErrors.DivisionByZero
+        }
         return number2 / number1
     case "^":
         return BigDecimal(floatLiteral: libm_pow(n2, n1))
@@ -70,6 +73,9 @@ func makeOperation(number1: BigDecimal, number2: BigDecimal, symbol: String) -> 
     case "ctg":
         return BigDecimal(floatLiteral: 1 / libm_tan(n1))
     case "!":
+        if number1 > 150 {
+            throw CalculateErrors.InvalidArgument
+        }
         return BigDecimal(floatLiteral: factorial(Int(n1)))
     case "ln":
         return BigDecimal(floatLiteral: libm_log(n1))
@@ -84,11 +90,15 @@ func makeOperation(number1: BigDecimal, number2: BigDecimal, symbol: String) -> 
     }
 }
 
-
 func factorial(_ n: Int) -> Double {
   return (1...n).map(Double.init).reduce(1.0, *)
 }
 
 func btd(number: BigDecimal) -> Double {
     return Double(String(number))!
+}
+
+enum CalculateErrors: Error {
+    case InvalidArgument
+    case DivisionByZero
 }

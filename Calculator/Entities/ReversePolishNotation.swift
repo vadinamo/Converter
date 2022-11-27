@@ -115,17 +115,33 @@ func calculate(input: [String]) -> String {
             stack.append(BigDecimal(s)!)
         }
         else if single_items_operations.contains(where: {$0 == s}) {
-            stack.append(makeOperation(number1: stack.popLast()!, number2: 0, symbol: s))
+            do {
+                try stack.append(makeOperation(number1: stack.popLast()!, number2: 0, symbol: s))
+            }
+            catch CalculateErrors.DivisionByZero {
+                return "Division by zero"
+            }
+            catch {
+                return "Invalid argument"
+            }
         }
         else if several_items_operations.contains(where: {$0 == s}) {
             let a = stack.popLast()
             let b = stack.popLast()
             
-            stack.append(makeOperation(number1: a!, number2: b!, symbol: s))
+            do {
+                try stack.append(makeOperation(number1: a!, number2: b!, symbol: s))
+            }
+            catch CalculateErrors.DivisionByZero {
+                return "Division by zero"
+            }
+            catch {
+                return "Invalid argument"
+            }
         }
     }
     
-    return period(string: String(stack[0]))
+    return String(stack[0]).contains(where: {$0 == "."}) ? period(string: String(stack[0])) : String(stack[0])
 }
 
 func period(string: String) -> String {
