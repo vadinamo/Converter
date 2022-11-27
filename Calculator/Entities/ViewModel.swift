@@ -7,6 +7,7 @@
 
 import Foundation
 import BigDecimal
+import SwiftUI
 
 
 class ViewModel: ObservableObject {
@@ -92,7 +93,7 @@ class ViewModel: ObservableObject {
             return
         }
         
-        else if (value == "pi" || value == "e") &&
+        else if (value == "pi") &&
                     (!leftCheck(check: check) ||
                      !rightCheck(check: check)) {
             return
@@ -161,7 +162,19 @@ class ViewModel: ObservableObject {
     }
     
     func calculate() {
-        self.output = Calculator.calculate(input: rpn(input: input.replacingOccurrences(of: cursorSymbol, with: "")))
+        self.output = "Computing..."
+        
+        var dsg = DispatchGroup()
+        dsg.enter()
+        DispatchQueue.global(qos: .userInteractive).async { [self] in
+            self.output = Calculator.calculate(input: rpn(input: input.replacingOccurrences(of: cursorSymbol, with: "")))
+        }
+        
+        var abortFlagItem = DispatchWorkItem(block: {
+            self.output = "Computing stopped"
+        })
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10, execute: abortFlagItem)
     }
     
     func clear() {

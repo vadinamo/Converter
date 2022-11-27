@@ -49,7 +49,7 @@ func completeString(string: String) -> String {
 }
 
 func rpn(input: String) -> [String] {
-    let inputStr = completeString(string: input).replacingOccurrences(of: "pi", with: "3.141592653589793").replacingOccurrences(of: "e", with: "2.71828")
+    let inputStr = completeString(string: input).replacingOccurrences(of: "pi", with: "3.141592653589793")
     
     var stack: [String] = []
     var number = ""

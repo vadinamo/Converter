@@ -22,8 +22,8 @@ extension String {
     
     var needBracket: Bool {
         return self != "." &&  self != "(" &&  self != ")" &&
-        self != "!" && self != "pi" && self != "e" &&
-        self != "+" &&  self != "-" &&  self != "*" &&  self != "/"
+        self != "!" && self != "pi" && self != "+" &&
+        self != "-" &&  self != "*" &&  self != "/"
     }
     
     var length: Int {

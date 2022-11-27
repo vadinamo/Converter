@@ -44,7 +44,8 @@ var priority: [String: Int] = [
     "ctg": 4,
     "ln": 4,
     "log": 4,
-    "!": 4
+    "!": 4,
+    "e": 4
 ]
 
 func makeOperation(number1: BigDecimal, number2: BigDecimal, symbol: String) throws -> BigDecimal {
@@ -76,16 +77,13 @@ func makeOperation(number1: BigDecimal, number2: BigDecimal, symbol: String) thr
     case "ctg":
         return BigDecimal(floatLiteral: 1 / libm_tan(n1))
     case "!":
-        if number1 > 150 {
-            throw CalculateErrors.InvalidArgument
-        }
-        return BigDecimal(floatLiteral: factorial(Int(n1)))
+        return factorial(number1)
     case "ln":
         return BigDecimal(floatLiteral: libm_log(n1))
     case "log":
         return BigDecimal(floatLiteral: libm_log10(n1))
     case "e":
-        return BigDecimal(floatLiteral: exp(1))
+        return exp(num: number1)
     case "pi":
         return 3.141592653589793
     default:
@@ -93,9 +91,47 @@ func makeOperation(number1: BigDecimal, number2: BigDecimal, symbol: String) thr
     }
 }
 
-func factorial(_ n: Int) -> Double {
-  return (1...n).map(Double.init).reduce(1.0, *)
+func factorial(_ i: BigDecimal) -> BigDecimal {
+    if i == 0 {
+        return 1
+    }
+    
+    return i * factorial(i - 1)
 }
+
+
+func int_pow(value: BigDecimal, power: Int) -> BigDecimal {
+    var v = value
+    var p: Int = power
+    
+    var result: BigDecimal = 1
+    while p > 0{
+        if p % 2 == 1{
+            result *= v
+        }
+        v *= v
+        p = p / 2
+    }
+    
+    return result
+}
+
+
+func exp(num: BigDecimal) -> BigDecimal {
+    var prev: BigDecimal = 0
+    var curr:  BigDecimal = 1
+    var i: BigDecimal = 1
+    
+    while abs(curr - prev) > 0.0000000000000000000000000001 {
+        prev = curr
+        curr += int_pow(value: num, power: Int(i)) / factorial(i)
+        
+        i += 1
+    }
+    
+    return curr
+}
+
 
 func btd(number: BigDecimal) -> Double {
     return Double(String(number))!
