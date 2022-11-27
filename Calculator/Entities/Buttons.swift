@@ -41,7 +41,7 @@ enum Buttons : String {
     case pow = "^"
     case pi = "pi"
     case exp = "e"
-    case lg = "lg"
+    case lg = "log"
     case ln = "ln"
     case factorial = "!"
     case leftBracket = "("

@@ -116,24 +116,36 @@ func calculate(input: [String]) -> String {
         }
         else if single_items_operations.contains(where: {$0 == s}) {
             do {
+                if stack.count == 0 {
+                    throw CalculateErrors.InvalidArgument
+                }
                 try stack.append(makeOperation(number1: stack.popLast()!, number2: 0, symbol: s))
             }
             catch CalculateErrors.DivisionByZero {
                 return "Division by zero"
+            }
+            catch CalculateErrors.Overload {
+                return "Overload"
             }
             catch {
                 return "Invalid argument"
             }
         }
         else if several_items_operations.contains(where: {$0 == s}) {
-            let a = stack.popLast()
-            let b = stack.popLast()
-            
             do {
+                let a = stack.popLast()
+                let b = stack.popLast()
+                if a == nil || b == nil {
+                    throw CalculateErrors.InvalidArgument
+                }
                 try stack.append(makeOperation(number1: a!, number2: b!, symbol: s))
+                
             }
             catch CalculateErrors.DivisionByZero {
                 return "Division by zero"
+            }
+            catch CalculateErrors.Overload {
+                return "Overload"
             }
             catch {
                 return "Invalid argument"

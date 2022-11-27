@@ -63,6 +63,9 @@ func makeOperation(number1: BigDecimal, number2: BigDecimal, symbol: String) thr
         }
         return number2 / number1
     case "^":
+        if String(libm_pow(n2, n1)) == "inf" {
+            throw CalculateErrors.Overload
+        }
         return BigDecimal(floatLiteral: libm_pow(n2, n1))
     case "sin":
         return BigDecimal(floatLiteral: libm_sin(n1))
@@ -101,4 +104,5 @@ func btd(number: BigDecimal) -> Double {
 enum CalculateErrors: Error {
     case InvalidArgument
     case DivisionByZero
+    case Overload
 }
