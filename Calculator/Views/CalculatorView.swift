@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import AlertToast
+
 
 struct CalculatorView: View {
     @State private var orientation = UIDevice.current.orientation
@@ -13,6 +15,9 @@ struct CalculatorView: View {
     
     @ObservedObject var vm: ViewModel
     @State var output = ""
+    
+    @AppStorage("toastToggle") private var toastToggle = false
+    @AppStorage("toastMessage") private var toastMessage = "Invalid input"
     
     var topButtons: [[Buttons]] {
         if !isScientific && !(orientation.isLandscape || UIScreen.main.bounds.height < UIScreen.main.bounds.width) {
@@ -67,6 +72,9 @@ struct CalculatorView: View {
         }
         .onRotate { newOrientation in
             orientation = newOrientation
+        }
+        .toast(isPresenting: $toastToggle, duration: 2, tapToDismiss: true) {
+            AlertToast(displayMode: .hud, type: .error(.red), title: toastMessage)
         }
     }
     

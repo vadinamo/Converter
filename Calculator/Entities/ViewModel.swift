@@ -17,6 +17,9 @@ class ViewModel: ObservableObject {
     @Published var input: String
     @Published var output: String
     
+    @AppStorage("toastToggle") private var toastToggle = false
+    @AppStorage("toastMessage") private var toastMessage = "Invalid input"
+    
     init(cursorSymbol: String) {
         self.cursorSymbol = cursorSymbol
         self.input = cursorSymbol
@@ -77,10 +80,16 @@ class ViewModel: ObservableObject {
     func inputValue(value: String) {
         if (several_items_operations.contains(where: {$0 == value}) || value == "!") {
             if cursorIndex == 0 || several_items_operations.contains(where: {$0 == input[cursorIndex - 1]}) {
+                // two operations in row
+                toastMessage = "Invalid operation input"
+                toastToggle.toggle()
                 return
             }
             
             else if input.replacingOccurrences(of: cursorSymbol, with: "")[cursorIndex - 1] == "(" && value != "-"{
+                // expression cannot start with operation except minus
+                toastMessage = "Expression cannot start with symbol except minus"
+                toastToggle.toggle()
                 return
             }
         }
@@ -90,20 +99,32 @@ class ViewModel: ObservableObject {
         if value.isNumber &&
             (!(leftCheck(check: check) || check[cursorIndex - 1].isNumber || (check[cursorIndex - 1] == ".")) ||
              !(rightCheck(check: check) || check[cursorIndex].isNumber || check[cursorIndex] == ".")) {
+            // invalid number input
+            toastMessage = "Invalid number input"
+            toastToggle.toggle()
             return
         }
         
-        else if (value == "pi") &&
+        else if value == "pi" &&
                     (!leftCheck(check: check) ||
                      !rightCheck(check: check)) {
+            // invalid pi input
+            toastMessage = "Invalid pi input"
+            toastToggle.toggle()
             return
         }
         
         else if single_items_operations.contains(where: {$0 == value}) && !leftCheck(check: check) && value != "!"{
+            // invalid operation input
+            toastMessage = "Invalid operation input"
+            toastToggle.toggle()
             return
         }
         
         else if value == "(" && !leftCheck(check: check) {
+            // invalid bracket input
+            toastMessage = "Invalid bracket input"
+            toastToggle.toggle()
             return
         }
         
@@ -119,6 +140,9 @@ class ViewModel: ObservableObject {
             }
             
             if stack.count == 0 {
+                // cannot input extra bracket
+                toastMessage = "Unable to enter extra bracket"
+                toastToggle.toggle()
                 return
             }
         }
@@ -143,14 +167,20 @@ class ViewModel: ObservableObject {
             let rightIndex = cursorIndex
             var leftIndex = rightIndex - 1
             
-            while leftIndex > 0 {
-                if several_items_operations.contains(where: {$0 == input[leftIndex]}) || (input[leftIndex] == "(" && leftIndex != rightIndex - 1) || input[leftIndex].isNumber || input[leftIndex] == ")" {
-                    if rightIndex - leftIndex > 1 {
-                        leftIndex += 1
+            if input[leftIndex] == "(" && !(leftIndex == 0 || !input[leftIndex - 1].isLetter) {
+                while leftIndex > 0 {
+                    if several_items_operations.contains(where: {$0 == input[leftIndex]}) || input[leftIndex] == "!" || (input[leftIndex] == "(" && leftIndex != rightIndex - 1) || input[leftIndex].isNumber || input[leftIndex] == ")" {
+                        if rightIndex - leftIndex > 1 {
+                            leftIndex += 1
+                        }
+                        break
                     }
-                    break
+                    leftIndex -= 1
                 }
-                leftIndex -= 1
+            }
+            
+            if input[leftIndex] == "(" && leftIndex != rightIndex - 1 {
+                leftIndex += 1
             }
             
             let start = input.prefix(leftIndex)
