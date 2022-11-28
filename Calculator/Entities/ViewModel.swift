@@ -17,6 +17,7 @@ class ViewModel: ObservableObject {
     @Published var input: String
     @Published var output: String
     
+    @AppStorage("successToastToggle") private var successToastToggle = false
     @AppStorage("toastToggle") private var toastToggle = false
     @AppStorage("toastMessage") private var toastMessage = "Invalid input"
     
@@ -96,7 +97,7 @@ class ViewModel: ObservableObject {
             }
         }
         
-        if value.isNumber && check[cursorIndex] != "!" &&
+        if value.replacingOccurrences(of: ".", with: "").isNumber && check[cursorIndex] != "!" &&
             (!(leftCheck(check: check) || check[cursorIndex - 1].isNumber || (check[cursorIndex - 1] == ".")) ||
              !(rightCheck(check: check) || check[cursorIndex].isNumber || check[cursorIndex] == ".")) {
             // invalid number input
@@ -247,7 +248,7 @@ class ViewModel: ObservableObject {
         }
         thread.start()
         
-        var timeRemaining = 10
+        var timeRemaining = 20
         _ = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { timer in
             timeRemaining -= 1
             print(timeRemaining)
@@ -276,5 +277,33 @@ class ViewModel: ObservableObject {
     
     func rightCheck(check: String) -> Bool {
         return cursorIndex == check.count || check[cursorIndex] == ")" || (several_items_operations.contains(where: {$0 == check[cursorIndex]}))
+    }
+    
+    func paste() {
+        if let pastedString = UIPasteboard.general.string {
+            if !pastedString.replacingOccurrences(of: ".", with: "").isNumber {
+                toastMessage = "Only numbers can be pasted"
+                toastToggle.toggle()
+                return
+            }
+            if pastedString.filter({ $0 == "." }).count > 1 {
+                toastMessage = "Number can contain only one dot"
+                toastToggle.toggle()
+                return
+            }
+            inputValue(value: pastedString)
+            toastMessage = "Pasted"
+            successToastToggle.toggle()
+        }
+    }
+    func copy() {
+        if !output.replacingOccurrences(of: ".", with: "").isNumber || output.count == 0 {
+            toastMessage = "There is nothing to copy"
+            toastToggle.toggle()
+            return
+        }
+        UIPasteboard.general.string = output
+        toastMessage = "Copied"
+        successToastToggle.toggle()
     }
 }

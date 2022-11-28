@@ -16,6 +16,7 @@ struct CalculatorView: View {
     @ObservedObject var vm: ViewModel
     @State var output = ""
     
+    @AppStorage("successToastToggle") private var successToastToggle = false
     @AppStorage("toastToggle") private var toastToggle = false
     @AppStorage("toastMessage") private var toastMessage = "Invalid input"
     
@@ -28,7 +29,7 @@ struct CalculatorView: View {
         }
         
         return [
-            [.left, .right],
+            [.left, .right, .copy, .paste],
             [.sin, .cos, .tg, .ctg, .calculate],
             [.pow, .pi, .exp, .lg, .ln],
             [.factorial, .leftBracket, .rightBracket, .clear, .remove]
@@ -76,6 +77,9 @@ struct CalculatorView: View {
         .toast(isPresenting: $toastToggle, duration: 2, tapToDismiss: true) {
             AlertToast(displayMode: .hud, type: .error(.red), title: toastMessage)
         }
+        .toast(isPresenting: $successToastToggle, duration: 2, tapToDismiss: true) {
+            AlertToast(displayMode: .hud, type: .regular, title: toastMessage)
+        }
     }
     
     var width: CGFloat {
@@ -105,7 +109,13 @@ struct CalculatorView: View {
             return (width - (5 * 12)) / (count) * (UIScreen.main.bounds.height < UIScreen.main.bounds.width ? 1.2 : 1)
         }
         else if item == .left || item == .right {
-            return (width - (4 * 12)) / count * (UIScreen.main.bounds.height < UIScreen.main.bounds.width ? 3.05 : 2)
+            if isScientific && UIScreen.main.bounds.height > UIScreen.main.bounds.width {
+                return (width - (4 * 12)) / count * 1.15
+            }
+            else if UIScreen.main.bounds.height < UIScreen.main.bounds.width {
+                return (width - (4 * 12)) / count * 1.8
+            }
+            return (width - (4 * 12)) / count * 2
         }
         else {
             if UIScreen.main.bounds.height < UIScreen.main.bounds.width {
@@ -225,6 +235,10 @@ struct CalculatorView: View {
             if UIScreen.main.bounds.height > UIScreen.main.bounds.width {
                 isScientific.toggle()
             }
+            else {
+                toastMessage = "Only scientific mode on horizontal orientation"
+                toastToggle.toggle()
+            }
             break
         case .left:
             vm.moveCursorLeft()
@@ -237,6 +251,12 @@ struct CalculatorView: View {
             break
         case .remove:
             vm.removeSymbol()
+            break
+        case .paste:
+            vm.paste()
+            break
+        case .copy:
+            vm.copy()
             break
         default:
             vm.inputValue(value: button.rawValue)

@@ -47,6 +47,9 @@ enum Buttons : String {
     case leftBracket = "("
     case rightBracket = ")"
     
+    case copy = "doc.on.clipboard"
+    case paste = "doc.on.clipboard.fill"
+    
     var buttonColor: Color {
         switch self {
         case .one, .two, .three,
@@ -54,7 +57,7 @@ enum Buttons : String {
                 .seven, .eight, .nine,
                 .swapKeyboard, .zero, .dot:
             return Color(UIColor.darkGray)
-        case .remove, .plus, .minus, .multiply, .divide:
+        case .plus, .minus, .multiply, .remove, .divide, .copy, .paste:
             return .orange
         default:
             return Color(UIColor.lightGray)
@@ -63,7 +66,7 @@ enum Buttons : String {
     
     var buttonLabel: Text {
         switch self {
-        case .left, .right, .swapKeyboard, .remove, .clear, .calculate:
+        case .left, .right, .swapKeyboard, .remove, .clear, .calculate, .copy, .paste:
             return Text(Image(systemName: self.rawValue))
         default:
             return Text(self.rawValue)

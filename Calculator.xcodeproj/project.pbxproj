@@ -85,7 +85,6 @@
 				BEE396AF292E583D009E7671 /* Entities */,
 				BE858E04292B7C20004DEF25 /* Views */,
 				BE858DF6292B7C14004DEF25 /* CalculatorApp.swift */,
-				BE858DF8292B7C14004DEF25 /* ContentView.swift */,
 				BE858DFA292B7C15004DEF25 /* Assets.xcassets */,
 				BE858DFC292B7C15004DEF25 /* Preview Content */,
 			);
@@ -103,6 +102,7 @@
 		BE858E04292B7C20004DEF25 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				BE858DF8292B7C14004DEF25 /* ContentView.swift */,
 				BE858E05292B7C9A004DEF25 /* CalculatorView.swift */,
 			);
 			path = Views;

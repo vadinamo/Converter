@@ -77,6 +77,9 @@ func makeOperation(number1: BigDecimal, number2: BigDecimal, symbol: String) thr
     case "ctg":
         return BigDecimal(floatLiteral: 1 / libm_tan(n1))
     case "!":
+        if number1 > 10000 {
+            throw CalculateErrors.Overload
+        }
         return factorial(number1)
     case "ln":
         return BigDecimal(floatLiteral: libm_log(n1))
