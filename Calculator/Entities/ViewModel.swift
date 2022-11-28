@@ -32,7 +32,7 @@ class ViewModel: ObservableObject {
             self.input = input.replacingOccurrences(of: cursorSymbol, with: "")
             
             var i = cursorIndex - 1
-            if !input[i].isNumber && !several_items_operations.contains(where: {$0 == input[i]}) {
+            if !input[i].isNumber && !several_items_operations.contains(where: {$0 == input[i]}) && input[i] != "!" {
                 while i > 0 {
                     if ((input[i] == "(" || input[i] == ")") && i != cursorIndex - 1) || several_items_operations.contains(where: {$0 == input[i]}) || input[i].isNumber {
                         i += 1
@@ -56,7 +56,7 @@ class ViewModel: ObservableObject {
             self.input = input.replacingOccurrences(of: cursorSymbol, with: "")
             
             var i = cursorIndex + 1
-            if !several_items_operations.contains(where: {$0 == input[i]}) && !several_items_operations.contains(where: {$0 == input[cursorIndex]}) {
+            if !several_items_operations.contains(where: {$0 == input[i]}) && !several_items_operations.contains(where: {$0 == input[cursorIndex]}) && input[i] != "!" {
                 while i < input.count {
                     if input[i].isNumber || input[i] == ")" {
                         break
@@ -196,7 +196,7 @@ class ViewModel: ObservableObject {
             let rightIndex = cursorIndex
             var leftIndex = rightIndex - 1
             
-            if input[leftIndex] == "(" && !(leftIndex == 0 || !input[leftIndex - 1].isLetter) {
+            if (input[leftIndex] == "(" || input[leftIndex].isLetter) && !(leftIndex == 0 || !input[leftIndex - 1].isLetter) {
                 while leftIndex > 0 {
                     if several_items_operations.contains(where: {$0 == input[leftIndex]}) || input[leftIndex] == "!" || (input[leftIndex] == "(" && leftIndex != rightIndex - 1) || input[leftIndex].isNumber || input[leftIndex] == ")" {
                         if rightIndex - leftIndex > 1 {
@@ -212,8 +212,15 @@ class ViewModel: ObservableObject {
                 leftIndex += 1
             }
             
-            let start = input.prefix(leftIndex)
+            var start = input.prefix(leftIndex)
             let end = input.suffix(input.count - rightIndex)
+            
+            if start.count != 0 && end.count != 0 &&
+                several_items_operations.contains(where: {$0 == String(start.last!)}) &&
+                several_items_operations.contains(where: {$0 == String(end.first!)}) {
+                self.cursorIndex -= 1
+                start.removeLast()
+            }
             
             self.cursorIndex -= (rightIndex - leftIndex)
             self.input = start + cursorSymbol + end
@@ -221,9 +228,22 @@ class ViewModel: ObservableObject {
     }
     
     func calculate() {
+        let check = input.replacingOccurrences(of: cursorSymbol, with: "")
+        for i in 0..<check.count - 1 {
+            toastMessage = "Make sure that you insert multiply sign"
+            if check[i].isNumber && check[i + 1].isLetter {
+                toastToggle.toggle()
+                return
+            }
+            else if check[i + 1].isNumber && check[i].isLetter {
+                toastToggle.toggle()
+                return
+            }
+        }
+        
         let thread = Thread { [self] in
             self.output = "Computing..."
-            self.output = Calculator.calculate(input: rpn(input: input.replacingOccurrences(of: cursorSymbol, with: "")))
+            self.output = Calculator.calculate(input: rpn(input: check))
         }
         thread.start()
         
