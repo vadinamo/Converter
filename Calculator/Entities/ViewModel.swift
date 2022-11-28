@@ -78,8 +78,10 @@ class ViewModel: ObservableObject {
     }
     
     func inputValue(value: String) {
+        let check = input.replacingOccurrences(of: cursorSymbol, with: "")
+        
         if (several_items_operations.contains(where: {$0 == value}) || value == "!") {
-            if cursorIndex == 0 || several_items_operations.contains(where: {$0 == input[cursorIndex - 1]}) {
+            if cursorIndex == 0 || several_items_operations.contains(where: {$0 == input[cursorIndex - 1]}) || several_items_operations.contains(where: {$0 == check[cursorIndex]}) {
                 // two operations in row
                 toastMessage = "Invalid operation input"
                 toastToggle.toggle()
@@ -94,9 +96,7 @@ class ViewModel: ObservableObject {
             }
         }
         
-        let check = input.replacingOccurrences(of: cursorSymbol, with: "")
-        
-        if value.isNumber &&
+        if value.isNumber && check[cursorIndex] != "!" &&
             (!(leftCheck(check: check) || check[cursorIndex - 1].isNumber || (check[cursorIndex - 1] == ".")) ||
              !(rightCheck(check: check) || check[cursorIndex].isNumber || check[cursorIndex] == ".")) {
             // invalid number input
@@ -147,8 +147,37 @@ class ViewModel: ObservableObject {
             }
         }
         
-        var val = value
+        else if value == "." {
+            var leftIndex = cursorIndex
+            while leftIndex > 0 {
+                if leftIndex != cursorIndex && (check[leftIndex] == "(" || several_items_operations.contains(where: {$0 == check[leftIndex]})) {
+                    leftIndex += 1
+                    break
+                }
+                leftIndex -= 1
+            }
+            
+            if check[leftIndex] == "(" {
+                leftIndex += 1
+            }
+            
+            var rightIndex = cursorIndex
+            while rightIndex < check.count {
+                if check[rightIndex] == ")" || several_items_operations.contains(where: {$0 == check[rightIndex]}) {
+                    break
+                }
+                rightIndex += 1
+            }
+            
+            if check.substring(with: leftIndex..<rightIndex).contains(where: {$0 == "."}) {
+                toastMessage = "Number can contain only one dot"
+                toastToggle.toggle()
+                return
+            }
+        }
         self.input = check
+        
+        var val = value
         let start = input.prefix(cursorIndex)
         let end = input.suffix(input.count - cursorIndex)
         
@@ -199,7 +228,7 @@ class ViewModel: ObservableObject {
         thread.start()
         
         var timeRemaining = 10
-        let timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { timer in
+        _ = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { timer in
             timeRemaining -= 1
             print(timeRemaining)
             
@@ -226,6 +255,6 @@ class ViewModel: ObservableObject {
     }
     
     func rightCheck(check: String) -> Bool {
-        return cursorIndex == check.count || check[cursorIndex] == ")" || several_items_operations.contains(where: {$0 == check[cursorIndex]})
+        return cursorIndex == check.count || check[cursorIndex] == ")" || (several_items_operations.contains(where: {$0 == check[cursorIndex]}))
     }
 }
