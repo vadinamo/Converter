@@ -152,7 +152,9 @@ func calculate(input: [String]) -> String {
             }
         }
     }
-    
+    if stack.count == 0 {
+        return "nan"
+    }
     return String(stack[0]).contains(where: {$0 == "."}) ? period(string: String(stack[0])) : String(stack[0])
 }
 

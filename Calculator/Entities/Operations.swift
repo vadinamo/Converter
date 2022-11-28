@@ -91,12 +91,17 @@ func makeOperation(number1: BigDecimal, number2: BigDecimal, symbol: String) thr
     }
 }
 
-func factorial(_ i: BigDecimal) -> BigDecimal {
-    if i == 0 {
-        return 1
+func factorial(_ n: BigDecimal) -> BigDecimal {
+    var r: BigDecimal = 1
+    if n < 2 {
+        return r
     }
     
-    return i * factorial(i - 1)
+    for i in 2...Int(n) {
+        r *= BigDecimal(i)
+    }
+    
+    return r
 }
 
 

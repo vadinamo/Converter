@@ -162,19 +162,27 @@ class ViewModel: ObservableObject {
     }
     
     func calculate() {
-        self.output = "Computing..."
-        
-        var dsg = DispatchGroup()
-        dsg.enter()
-        DispatchQueue.global(qos: .userInteractive).async { [self] in
+        let thread = Thread { [self] in
+            self.output = "Computing..."
             self.output = Calculator.calculate(input: rpn(input: input.replacingOccurrences(of: cursorSymbol, with: "")))
         }
+        thread.start()
         
-        var abortFlagItem = DispatchWorkItem(block: {
-            self.output = "Computing stopped"
+        var timeRemaining = 10
+        let timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { timer in
+            timeRemaining -= 1
+            print(timeRemaining)
+            
+            if thread.isFinished {
+                timer.invalidate()
+            }
+            
+            else if timeRemaining == 0 {
+                thread.cancel()
+                timer.invalidate()
+                self.output = "Computing stopped"
+            }
         })
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10, execute: abortFlagItem)
     }
     
     func clear() {
