@@ -361,8 +361,6 @@ class ViewModel: ObservableObject {
         var correct = false
         var number = 0
         
-        print(bracketIndex)
-        
         for i in 0..<result.count {
             if result[i] == "(" {
                 stack.append("(")
@@ -373,12 +371,13 @@ class ViewModel: ObservableObject {
                 }
             }
             else if result[i] == ")" {
-                print(number, stack.count)
-                
                 if correct && stack.count == number {
                     let start = input.prefix(i)
-                    var end = input.suffix(input.count - i - 1)
-                    end.removeLast(result.count - string.count)
+                    var end = input.suffix(input.count - i)
+                    if end.count != 0 {
+                        end.removeFirst()
+                    }
+                    
                     return String(start + end)
                 }
                 
