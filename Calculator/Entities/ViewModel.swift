@@ -35,7 +35,6 @@ class ViewModel: ObservableObject {
             var i = cursorIndex - 1
             if !input[i].isNumber && !several_items_operations.contains(where: {$0 == input[i]}) && input[i] != "!" {
                 while i >= 0 {
-                    print(i)
                     if ((input[i] == "(" || input[i] == ")") && i != cursorIndex - 1) || several_items_operations.contains(where: {$0 == input[i]}) || input[i].isNumber {
                         i += 1
                         break
@@ -141,6 +140,12 @@ class ViewModel: ObservableObject {
                     stack.append("(")
                 }
                 else if s == ")" {
+                    if stack.count == 0 {
+                        // cannot input extra bracket
+                        toastMessage = "Unable to enter extra bracket"
+                        toastToggle.toggle()
+                        return
+                    }
                     stack.removeLast()
                 }
             }
@@ -218,6 +223,11 @@ class ViewModel: ObservableObject {
                 leftIndex += 1
             }
             
+            if input.substring(with: leftIndex..<rightIndex).contains("(") {
+                let i = (input.substring(with: leftIndex..<rightIndex).firstIndex(of: "(")?.utf16Offset(in: input.substring(with: leftIndex..<rightIndex)))! + leftIndex
+                input = removeBracket(string: input, bracketIndex: i)
+            }
+            
             var start = input.prefix(leftIndex)
             let end = input.suffix(input.count - rightIndex)
             
@@ -258,7 +268,7 @@ class ViewModel: ObservableObject {
         
         let thread = Thread { [self] in
             self.output = "Computing..."
-            self.output = Calculator.calculate(input: rpn(input: check))
+            self.output = removeZeros(string: Calculator.calculate(input: rpn(input: check)))
         }
         thread.start()
         
@@ -310,6 +320,7 @@ class ViewModel: ObservableObject {
             successToastToggle.toggle()
         }
     }
+    
     func copy() {
         if !output.replacingOccurrences(of: ".", with: "").isNumber || output.count == 0 {
             toastMessage = "There is nothing to copy"
@@ -319,5 +330,62 @@ class ViewModel: ObservableObject {
         UIPasteboard.general.string = output
         toastMessage = "Copied"
         successToastToggle.toggle()
+    }
+    
+    func removeZeros(string: String) -> String {
+        var result = string
+        if result.contains(".") {
+            let resultArr = Array(string.reversed())
+            
+            for i in 0..<resultArr.count {
+                if resultArr[i] == "0" {
+                    result.removeLast()
+                }
+                else if resultArr[i] == "." {
+                    result.removeLast()
+                    break
+                }
+                else {
+                    break
+                }
+            }
+        }
+        
+        return result
+    }
+    
+    func removeBracket(string: String, bracketIndex: Int) -> String {
+        var result = completeBrackets(string: string)
+        var stack: [String] = []
+        
+        var correct = false
+        var number = 0
+        
+        print(bracketIndex)
+        
+        for i in 0..<result.count {
+            if result[i] == "(" {
+                stack.append("(")
+                
+                if i == bracketIndex {
+                    correct = true
+                    number = stack.count
+                }
+            }
+            else if result[i] == ")" {
+                print(number, stack.count)
+                
+                if correct && stack.count == number {
+                    let start = input.prefix(i)
+                    var end = input.suffix(input.count - i - 1)
+                    end.removeLast(result.count - string.count)
+                    return String(start + end)
+                }
+                
+                stack.removeLast()
+            }
+        }
+        
+        return result
     }
 }
