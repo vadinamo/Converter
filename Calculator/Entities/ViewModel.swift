@@ -34,7 +34,8 @@ class ViewModel: ObservableObject {
             
             var i = cursorIndex - 1
             if !input[i].isNumber && !several_items_operations.contains(where: {$0 == input[i]}) && input[i] != "!" {
-                while i > 0 {
+                while i >= 0 {
+                    print(i)
                     if ((input[i] == "(" || input[i] == ")") && i != cursorIndex - 1) || several_items_operations.contains(where: {$0 == input[i]}) || input[i].isNumber {
                         i += 1
                         break
@@ -42,6 +43,10 @@ class ViewModel: ObservableObject {
                     
                     i -= 1
                 }
+            }
+            
+            if i < 0 {
+                i += 1
             }
             
             let start = input.prefix(i)
@@ -57,7 +62,7 @@ class ViewModel: ObservableObject {
             self.input = input.replacingOccurrences(of: cursorSymbol, with: "")
             
             var i = cursorIndex + 1
-            if !several_items_operations.contains(where: {$0 == input[i]}) && !several_items_operations.contains(where: {$0 == input[cursorIndex]}) && input[i] != "!" {
+            if !several_items_operations.contains(where: {$0 == input[i]}) && !several_items_operations.contains(where: {$0 == input[cursorIndex]}) && input[i] != "!" && input[cursorIndex] != "(" {
                 while i < input.count {
                     if input[i].isNumber || input[i] == ")" {
                         break
@@ -82,7 +87,7 @@ class ViewModel: ObservableObject {
         let check = input.replacingOccurrences(of: cursorSymbol, with: "")
         
         if (several_items_operations.contains(where: {$0 == value}) || value == "!") {
-            if cursorIndex == 0 || several_items_operations.contains(where: {$0 == input[cursorIndex - 1]}) || several_items_operations.contains(where: {$0 == check[cursorIndex]}) {
+            if (cursorIndex != 0 && several_items_operations.contains(where: {$0 == input[cursorIndex - 1]})) || several_items_operations.contains(where: {$0 == check[cursorIndex]}) {
                 // two operations in row
                 toastMessage = "Invalid operation input"
                 toastToggle.toggle()
@@ -216,11 +221,16 @@ class ViewModel: ObservableObject {
             var start = input.prefix(leftIndex)
             let end = input.suffix(input.count - rightIndex)
             
-            if start.count != 0 && end.count != 0 &&
-                several_items_operations.contains(where: {$0 == String(start.last!)}) &&
-                several_items_operations.contains(where: {$0 == String(end.first!)}) {
-                self.cursorIndex -= 1
-                start.removeLast()
+            if start.count != 0 && end.count != 0 {
+                if several_items_operations.contains(where: {$0 == String(start.last!)}) &&
+                    several_items_operations.contains(where: {$0 == String(end.first!)}) {
+                    self.cursorIndex -= 1
+                    start.removeLast()
+                }
+                else if start.last == "i" && end.first == "p" {
+                    start.removeLast(2)
+                    cursorIndex -= 2
+                }
             }
             
             self.cursorIndex -= (rightIndex - leftIndex)
