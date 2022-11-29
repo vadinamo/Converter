@@ -63,7 +63,7 @@ class ViewModel: ObservableObject {
             var i = cursorIndex + 1
             if !several_items_operations.contains(where: {$0 == input[i]}) && !several_items_operations.contains(where: {$0 == input[cursorIndex]}) && input[i] != "!" && input[cursorIndex] != "(" {
                 while i < input.count {
-                    if input[i].isNumber || input[i] == ")" {
+                    if input[i].isNumber || input[i] == ")" || several_items_operations.contains(where: {$0 == input[i]}) {
                         break
                     }
                     else if input[i] == "(" {
