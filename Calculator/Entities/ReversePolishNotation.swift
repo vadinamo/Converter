@@ -127,6 +127,12 @@ func calculate(input: [String]) -> String {
             catch CalculateErrors.Overload {
                 return "Overload"
             }
+            catch CalculateErrors.ShitFactorial {
+                return "Factorial can only be calculated from an integer"
+            }
+            catch CalculateErrors.NotExists {
+                return "Trigonometrical function does not exists for current argument"
+            }
             catch {
                 return "Invalid argument"
             }

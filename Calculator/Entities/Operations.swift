@@ -49,8 +49,8 @@ var priority: [String: Int] = [
 ]
 
 func makeOperation(number1: BigDecimal, number2: BigDecimal, symbol: String) throws -> BigDecimal {
-    let n1: Double = btd(number: number1)
-    let n2: Double = btd(number: number2)
+    let n1: Double = btd(number1)
+    let n2: Double = btd(number2)
     switch symbol {
     case "+":
         return number1 + number2
@@ -69,16 +69,27 @@ func makeOperation(number1: BigDecimal, number2: BigDecimal, symbol: String) thr
         }
         return BigDecimal(floatLiteral: libm_pow(n2, n1))
     case "sin":
-        return BigDecimal(floatLiteral: libm_sin(n1))
+        return sin(degree: number1)
     case "cos":
-        return BigDecimal(floatLiteral: libm_cos(n1))
+        return cos(degree: number1)
     case "tg":
-        return BigDecimal(floatLiteral: libm_tan(n1))
+        let c = cos(degree: number1)
+        if c == 0 {
+            throw CalculateErrors.NotExists
+        }
+        return sin(degree: number1) / c
     case "ctg":
-        return BigDecimal(floatLiteral: 1 / libm_tan(n1))
+        let s = sin(degree: number1)
+        if s == 0 {
+            throw CalculateErrors.NotExists
+        }
+        return cos(degree: number1) / s
     case "!":
         if number1 > 10000 {
             throw CalculateErrors.Overload
+        }
+        else if String(number1).contains(".") {
+            throw CalculateErrors.ShitFactorial
         }
         return factorial(number1)
     case "ln":
@@ -107,7 +118,6 @@ func factorial(_ n: BigDecimal) -> BigDecimal {
     return r
 }
 
-
 func int_pow(value: BigDecimal, power: Int) -> BigDecimal {
     var v = value
     var p: Int = power
@@ -124,7 +134,6 @@ func int_pow(value: BigDecimal, power: Int) -> BigDecimal {
     return result
 }
 
-
 func exp(num: BigDecimal) -> BigDecimal {
     var prev: BigDecimal = 0
     var curr:  BigDecimal = 1
@@ -140,13 +149,26 @@ func exp(num: BigDecimal) -> BigDecimal {
     return curr
 }
 
+func sin(degree: BigDecimal) -> BigDecimal {
+    return BigDecimal(floatLiteral: __sinpi(btd(degrees(rad: degree))/180.0))
+}
 
-func btd(number: BigDecimal) -> Double {
+func cos(degree: BigDecimal) -> BigDecimal {
+    return BigDecimal(floatLiteral: __cospi(btd(degrees(rad: degree))/180.0))
+}
+
+func degrees(rad: BigDecimal) -> BigDecimal {
+    return rad / 3.141592653589793 * 180
+}
+
+func btd(_ number: BigDecimal) -> Double {
     return Double(String(number))!
 }
 
 enum CalculateErrors: Error {
     case InvalidArgument
+    case ShitFactorial
     case DivisionByZero
+    case NotExists
     case Overload
 }
