@@ -229,6 +229,10 @@ class ViewModel: ObservableObject {
     }
     
     func calculate() {
+        if input.count > 1000 {
+            self.output = "Too much"
+            return
+        }
         let check = input.replacingOccurrences(of: cursorSymbol, with: "")
         for i in 0..<check.count - 1 {
             toastMessage = "Make sure that you insert multiply sign"

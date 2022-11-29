@@ -64,21 +64,34 @@ func makeOperation(number1: BigDecimal, number2: BigDecimal, symbol: String) thr
         }
         return number2 / number1
     case "^":
-        if String(libm_pow(n2, n1)) == "inf" {
+        if greaterThenDouble(number1) || greaterThenDouble(number2) ||
+            String(libm_pow(n2, n1)) == "inf" {
             throw CalculateErrors.Overload
         }
         return BigDecimal(floatLiteral: libm_pow(n2, n1))
     case "sin":
+        if greaterThenDouble(number1) {
+            throw CalculateErrors.Overload
+        }
         return sin(degree: number1)
     case "cos":
+        if greaterThenDouble(number1) {
+            throw CalculateErrors.Overload
+        }
         return cos(degree: number1)
     case "tg":
+        if greaterThenDouble(number1) || greaterThenDouble(number2) {
+            throw CalculateErrors.Overload
+        }
         let c = cos(degree: number1)
         if c == 0 {
             throw CalculateErrors.NotExists
         }
         return sin(degree: number1) / c
     case "ctg":
+        if greaterThenDouble(number1) || greaterThenDouble(number2) {
+            throw CalculateErrors.Overload
+        }
         let s = sin(degree: number1)
         if s == 0 {
             throw CalculateErrors.NotExists
@@ -163,6 +176,10 @@ func degrees(rad: BigDecimal) -> BigDecimal {
 
 func btd(_ number: BigDecimal) -> Double {
     return Double(String(number))!
+}
+
+func greaterThenDouble(_ number: BigDecimal) -> Bool {
+    return number > BigDecimal(floatLiteral: Double.greatestFiniteMagnitude)
 }
 
 enum CalculateErrors: Error {
