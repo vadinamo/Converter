@@ -251,31 +251,22 @@ class ViewModel: ObservableObject {
     }
     
     func calculate() {
-        print(input.count)
         if input.count > 1000 {
             self.output = "Too much"
             return
         }
         
-        let check = input.replacingOccurrences(of: cursorSymbol, with: "")
+        var check = input.replacingOccurrences(of: cursorSymbol, with: "")
         toastMessage = "Make sure that you insert multiply sign"
         
         for i in 0..<check.count - 1 {
-            if check[i].isNumber && check[i + 1].isLetter {
-                toastToggle.toggle()
-                return
-            }
-            else if check[i + 1].isNumber && check[i].isLetter {
-                toastToggle.toggle()
-                return
-            }
-            else if check[i + 1] == "(" && check[i] == ")" {
-                toastToggle.toggle()
-                return
-            }
-            else if check[i + 1].isLetter && check[i] == ")" {
-                toastToggle.toggle()
-                return
+            if check[i].isNumber && check[i + 1].isLetter ||
+                check[i + 1].isNumber && check[i].isLetter ||
+                check[i + 1] == "(" && check[i] == ")" ||
+                check[i + 1].isLetter && check[i] == ")" {
+                let start = check.prefix(i + 1)
+                let end = check.suffix(check.count - i - 1)
+                check = start + "*" + end
             }
         }
         

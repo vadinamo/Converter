@@ -161,8 +161,12 @@ func calculate(input: [String]) -> String {
     if stack.count == 0 {
         return "nan"
     }
-    return String(stack[0]).contains(where: {$0 == "."}) ?
-    period(string: String(String(stack[0]).prefix(String(stack[0]).count - 1))) : String(stack[0])
+    
+    let stock = String(stack[0])
+    let short = String(String(stack[0]).prefix(String(stack[0]).count - 1))
+    
+    return stock.contains(where: {$0 == "."}) && String(short.suffix(short.count - short.distance(of: ".")! - 1)).count > 10 ?
+    period(string: short) : stock
 }
 
 func period(string: String) -> String {

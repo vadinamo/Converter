@@ -70,6 +70,8 @@ func makeOperation(number1: BigDecimal, number2: BigDecimal, symbol: String) thr
         }
         return BigDecimal(floatLiteral: libm_pow(n2, n1))
     case "sin":
+        print(sin(degree: number1))
+        print(sin(degree: BigDecimal(floatLiteral: Double.pi / 6)))
         if greaterThenDouble(number1) {
             throw CalculateErrors.Overload
         }
