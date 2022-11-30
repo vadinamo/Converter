@@ -110,6 +110,9 @@ func makeOperation(number1: BigDecimal, number2: BigDecimal, symbol: String) thr
     case "log":
         return BigDecimal(floatLiteral: libm_log10(n1))
     case "e":
+        if number1 > 200 {
+            throw CalculateErrors.Overload
+        }
         return exp(num: number1)
     case "pi":
         return 3.141592653589793

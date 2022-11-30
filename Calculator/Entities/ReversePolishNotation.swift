@@ -161,7 +161,8 @@ func calculate(input: [String]) -> String {
     if stack.count == 0 {
         return "nan"
     }
-    return String(stack[0]).contains(where: {$0 == "."}) ? period(string: String(stack[0])) : String(stack[0])
+    return String(stack[0]).contains(where: {$0 == "."}) ?
+    period(string: String(String(stack[0]).prefix(String(stack[0]).count - 1))) : String(stack[0])
 }
 
 func period(string: String) -> String {

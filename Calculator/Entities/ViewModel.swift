@@ -126,14 +126,14 @@ class ViewModel: ObservableObject {
             return
         }
         
-        else if value == "(" && !leftCheck(check: check) {
-            // invalid bracket input
-            toastMessage = "Invalid bracket input"
-            toastToggle.toggle()
-            return
-        }
-        
         else if value == ")" {
+            if cursorIndex == 0 {
+                // cannot input extra bracket
+                toastMessage = "Unable to enter extra bracket"
+                toastToggle.toggle()
+                return
+            }
+            
             var stack: [String] = []
             for s in check {
                 if s == "(" {
@@ -225,7 +225,9 @@ class ViewModel: ObservableObject {
             
             if input.substring(with: leftIndex..<rightIndex).contains("(") {
                 let i = (input.substring(with: leftIndex..<rightIndex).firstIndex(of: "(")?.utf16Offset(in: input.substring(with: leftIndex..<rightIndex)))! + leftIndex
-                input = removeBracket(string: input, bracketIndex: i)
+                if input.contains(where: {$0 == ")"}) {
+                    input = removeBracket(string: input, bracketIndex: i)
+                }
             }
             
             var start = input.prefix(leftIndex)
@@ -249,18 +251,29 @@ class ViewModel: ObservableObject {
     }
     
     func calculate() {
+        print(input.count)
         if input.count > 1000 {
             self.output = "Too much"
             return
         }
+        
         let check = input.replacingOccurrences(of: cursorSymbol, with: "")
+        toastMessage = "Make sure that you insert multiply sign"
+        
         for i in 0..<check.count - 1 {
-            toastMessage = "Make sure that you insert multiply sign"
             if check[i].isNumber && check[i + 1].isLetter {
                 toastToggle.toggle()
                 return
             }
             else if check[i + 1].isNumber && check[i].isLetter {
+                toastToggle.toggle()
+                return
+            }
+            else if check[i + 1] == "(" && check[i] == ")" {
+                toastToggle.toggle()
+                return
+            }
+            else if check[i + 1].isLetter && check[i] == ")" {
                 toastToggle.toggle()
                 return
             }
@@ -355,7 +368,7 @@ class ViewModel: ObservableObject {
     }
     
     func removeBracket(string: String, bracketIndex: Int) -> String {
-        var result = completeBrackets(string: string)
+        let result = completeBrackets(string: string)
         var stack: [String] = []
         
         var correct = false
