@@ -64,37 +64,17 @@ struct GameView: View {
                     Spacer()
                 }
             }
-            VStack {
-                ForEach(0...9, id: \.self) {i in
-                    HStack {
-                        ForEach(0...9, id: \.self) { j in
-                            VStack {
-                                ZoneView(currentState: attacks[i][j], size: 30)
-                                    .onTapGesture {
-                                        if attacks[i][j] == 0 {
-                                            attacks[i][j] = (field[i][j] == 1) ? 1 : 2
-                                        }
-                                    }
-                            }
-                        }
-                    }
-                }
-                
-                Divider()
-                
-                ForEach(0...9, id: \.self) {i in
-                    HStack {
-                        ForEach(0...9, id: \.self) { j in
-                            VStack {
-                                ZoneView(currentState: attacks[i][j], size: 15)
-                            }
-                        }
-                    }
-                }
+            else {
+                Text("Result:")
+                    .font(.largeTitle)
             }
-            .navigationBarBackButtonHidden(!surrender)
+            
+            FriendlyField
+            Divider()
+            EnemyField
         }
         .padding()
+        .navigationBarBackButtonHidden(!surrender)
         .swipeActions {
             Button(
                 role: .destructive,
@@ -109,6 +89,41 @@ struct GameView: View {
         ) {
             Button("Yes", role: .destructive) {
                 surrender = true
+            }
+        }
+    }
+    
+    @ViewBuilder
+    var FriendlyField: some View {
+        Text("Your field:")
+        
+        ForEach(0...9, id: \.self) {i in
+            HStack {
+                ForEach(0...9, id: \.self) { j in
+                    VStack {
+                        ZoneView(currentState: attacks[i][j], size: surrender ? 20 : 30)
+                            .onTapGesture {
+                                if attacks[i][j] == 0 && !surrender {
+                                    attacks[i][j] = (field[i][j] == 1) ? 1 : 2
+                                }
+                            }
+                    }
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    var EnemyField: some View {
+        Text("Enemy field:")
+        
+        ForEach(0...9, id: \.self) {i in
+            HStack {
+                ForEach(0...9, id: \.self) { j in
+                    VStack {
+                        ZoneView(currentState: attacks[i][j], size: surrender ? 20 : 15)
+                    }
+                }
             }
         }
     }
