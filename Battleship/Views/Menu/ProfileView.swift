@@ -11,9 +11,13 @@ import Firebase
 
 struct ProfileView: View {
     @ObservedObject var vm: ViewModel
+    @AppStorage("soundEnable") private var soundEnable = true
     
     var body: some View {
         VStack {
+            Toggle(isOn: $soundEnable, label: {
+                Text("Sound")
+            })
             Spacer()
             Button(action: {
                 print(vm.userIsLoggedIn)

@@ -9,6 +9,7 @@ import SwiftUI
 
 
 struct GameView: View {
+    @AppStorage("soundEnable") private var soundEnable = true
     @State private var surrender: Bool = false
     @State var confirmationShown = false
     
@@ -69,9 +70,9 @@ struct GameView: View {
                     .font(.largeTitle)
             }
             
-            FriendlyField
-            Divider()
             EnemyField
+            Divider()
+            FriendlyField
         }
         .padding()
         .navigationBarBackButtonHidden(!surrender)
@@ -94,8 +95,8 @@ struct GameView: View {
     }
     
     @ViewBuilder
-    var FriendlyField: some View {
-        Text("Your field:")
+    var EnemyField: some View {
+        Text("Enemy field:")
         
         ForEach(0...9, id: \.self) {i in
             HStack {
@@ -105,7 +106,9 @@ struct GameView: View {
                             .onTapGesture {
                                 if attacks[i][j] == 0 && !surrender {
                                     attacks[i][j] = (field[i][j] == 1) ? 1 : 2
-                                    playSound(soundName: (field[i][j] == 1) ? "hit" : "miss")
+                                    if soundEnable {
+                                        playSound(soundName: (field[i][j] == 1) ? "hit" : "miss")
+                                    }
                                 }
                             }
                     }
@@ -115,8 +118,8 @@ struct GameView: View {
     }
     
     @ViewBuilder
-    var EnemyField: some View {
-        Text("Enemy field:")
+    var FriendlyField: some View {
+        Text("Your field:")
         
         ForEach(0...9, id: \.self) {i in
             HStack {

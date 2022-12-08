@@ -32,12 +32,13 @@ struct StartView: View {
                 
                 Text("Create game")
                     .font(.largeTitle)
-                Button(action: {
-                }, label: {
+                NavigationLink {
+                    Preparation()
+                } label: {
                     Spacer()
                     Text("Create")
                     Spacer()
-                })
+                }
                 .buttonStyle(.borderedProminent)
             }
             .padding()

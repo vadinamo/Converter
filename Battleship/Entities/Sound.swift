@@ -11,7 +11,7 @@ import AVFoundation
 var player: AVAudioPlayer!
 
 func playSound(soundName: String) {
-    let number = Int.random(in: 1...4)
+    let number = Int.random(in: 1...12)
     let url = Bundle.main.url(forResource: soundName + String(number), withExtension: "mp3")
     
     guard url != nil else {
