@@ -22,6 +22,15 @@
 		BE6ECA412940A8F700C154E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE6ECA402940A8F700C154E8 /* Assets.xcassets */; };
 		BE6ECA442940A8F700C154E8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE6ECA432940A8F700C154E8 /* Preview Assets.xcassets */; };
 		BEAC591D2940B20200F54085 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEAC591C2940B20200F54085 /* LoginView.swift */; };
+		BEF038672942095D00D40668 /* hit2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BEF0385E2942095D00D40668 /* hit2.mp3 */; };
+		BEF038682942095D00D40668 /* hit3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BEF0385F2942095D00D40668 /* hit3.mp3 */; };
+		BEF038692942095D00D40668 /* hit1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BEF038602942095D00D40668 /* hit1.mp3 */; };
+		BEF0386A2942095D00D40668 /* hit4.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BEF038612942095D00D40668 /* hit4.mp3 */; };
+		BEF0386B2942095D00D40668 /* miss4.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BEF038632942095D00D40668 /* miss4.mp3 */; };
+		BEF0386C2942095D00D40668 /* miss3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BEF038642942095D00D40668 /* miss3.mp3 */; };
+		BEF0386D2942095D00D40668 /* miss2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BEF038652942095D00D40668 /* miss2.mp3 */; };
+		BEF0386E2942095D00D40668 /* miss1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BEF038662942095D00D40668 /* miss1.mp3 */; };
+		BEF0387029420AFF00D40668 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF0386F29420AFF00D40668 /* Sound.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +48,15 @@
 		BE6ECA402940A8F700C154E8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BE6ECA432940A8F700C154E8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		BEAC591C2940B20200F54085 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		BEF0385E2942095D00D40668 /* hit2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = hit2.mp3; sourceTree = "<group>"; };
+		BEF0385F2942095D00D40668 /* hit3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = hit3.mp3; sourceTree = "<group>"; };
+		BEF038602942095D00D40668 /* hit1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = hit1.mp3; sourceTree = "<group>"; };
+		BEF038612942095D00D40668 /* hit4.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = hit4.mp3; sourceTree = "<group>"; };
+		BEF038632942095D00D40668 /* miss4.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = miss4.mp3; sourceTree = "<group>"; };
+		BEF038642942095D00D40668 /* miss3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = miss3.mp3; sourceTree = "<group>"; };
+		BEF038652942095D00D40668 /* miss2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = miss2.mp3; sourceTree = "<group>"; };
+		BEF038662942095D00D40668 /* miss1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = miss1.mp3; sourceTree = "<group>"; };
+		BEF0386F29420AFF00D40668 /* Sound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +94,7 @@
 			isa = PBXGroup;
 			children = (
 				BE02343F29415D9A0086C098 /* ViewModel.swift */,
+				BEF0386F29420AFF00D40668 /* Sound.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -99,6 +118,7 @@
 		BE6ECA3B2940A8F500C154E8 /* Battleship */ = {
 			isa = PBXGroup;
 			children = (
+				BEF0385C2942094900D40668 /* Sounds */,
 				BE02344129415DA40086C098 /* Entities */,
 				BE02342C2941423A0086C098 /* Extensions */,
 				BEAC591B2940B1F500F54085 /* Views */,
@@ -136,6 +156,37 @@
 				BE02342829413F8A0086C098 /* GameView.swift */,
 			);
 			path = Game;
+			sourceTree = "<group>";
+		};
+		BEF0385C2942094900D40668 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				BEF0385D2942095D00D40668 /* hit */,
+				BEF038622942095D00D40668 /* miss */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
+		BEF0385D2942095D00D40668 /* hit */ = {
+			isa = PBXGroup;
+			children = (
+				BEF0385E2942095D00D40668 /* hit2.mp3 */,
+				BEF0385F2942095D00D40668 /* hit3.mp3 */,
+				BEF038602942095D00D40668 /* hit1.mp3 */,
+				BEF038612942095D00D40668 /* hit4.mp3 */,
+			);
+			path = hit;
+			sourceTree = "<group>";
+		};
+		BEF038622942095D00D40668 /* miss */ = {
+			isa = PBXGroup;
+			children = (
+				BEF038632942095D00D40668 /* miss4.mp3 */,
+				BEF038642942095D00D40668 /* miss3.mp3 */,
+				BEF038652942095D00D40668 /* miss2.mp3 */,
+				BEF038662942095D00D40668 /* miss1.mp3 */,
+			);
+			path = miss;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -203,9 +254,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BEF0386A2942095D00D40668 /* hit4.mp3 in Resources */,
 				BE6ECA442940A8F700C154E8 /* Preview Assets.xcassets in Resources */,
+				BEF0386C2942095D00D40668 /* miss3.mp3 in Resources */,
+				BEF0386D2942095D00D40668 /* miss2.mp3 in Resources */,
+				BEF038682942095D00D40668 /* hit3.mp3 in Resources */,
+				BEF038692942095D00D40668 /* hit1.mp3 in Resources */,
+				BEF038672942095D00D40668 /* hit2.mp3 in Resources */,
 				BE6ECA412940A8F700C154E8 /* Assets.xcassets in Resources */,
+				BEF0386E2942095D00D40668 /* miss1.mp3 in Resources */,
 				BE023439294156E80086C098 /* GoogleService-Info.plist in Resources */,
+				BEF0386B2942095D00D40668 /* miss4.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,6 +276,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE02344029415D9A0086C098 /* ViewModel.swift in Sources */,
+				BEF0387029420AFF00D40668 /* Sound.swift in Sources */,
 				BE023430294142670086C098 /* XMark.swift in Sources */,
 				BE02343E29415C3E0086C098 /* ProfileView.swift in Sources */,
 				BE02343C29415BBA0086C098 /* MenuView.swift in Sources */,

@@ -105,6 +105,7 @@ struct GameView: View {
                             .onTapGesture {
                                 if attacks[i][j] == 0 && !surrender {
                                     attacks[i][j] = (field[i][j] == 1) ? 1 : 2
+                                    playSound(soundName: (field[i][j] == 1) ? "hit" : "miss")
                                 }
                             }
                     }
